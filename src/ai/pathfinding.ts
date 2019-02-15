@@ -1,6 +1,7 @@
 import { Vector } from './../math/vector';
 import { Node } from './../core/grid-node';
 import { Grid } from './../core/grid';
+import { Heap } from './heap';
 
 export class Pathfinding {
 
@@ -14,19 +15,13 @@ export class Pathfinding {
 		let startNode: Node = this.grid.nodeFromWorldPoint(startPosition);
 		let targetNode: Node = this.grid.nodeFromWorldPoint(targetPosition);
 
-		let openSet: Node[] = [];
+		let openSet: Heap = new Heap();
 		let closedSet: Node[] = [];
 
-		openSet.push(startNode);
-		while (openSet.length){
-			let currentNode: Node = openSet[0];
-			for (let i = 0; i < openSet.length; i++){
-				if (openSet[i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost){
-					currentNode = openSet[i];
-				}
-			}
+		openSet.add(startNode);
+		while (openSet.count){
+			let currentNode: Node = openSet.removeFirst();
 
-			openSet.remove(currentNode);
 			closedSet.push(currentNode);
 
 			if (currentNode === targetNode){
@@ -47,7 +42,7 @@ export class Pathfinding {
 					neighbour.parent = currentNode;
 
 					if (!openSet.contains(neighbour)){
-						openSet.push(neighbour);
+						openSet.add(neighbour);
 					}
 				}
 			}

@@ -48,6 +48,10 @@ module.exports = {
 			{
 				test: /\.css$/,
 				loader: 'style-loader!css-loader'
+			},
+			{
+				test: /\.worker\.ts$/,
+				use: { loader: 'worker-loader' }
 			}
 		]
 	},

@@ -12,6 +12,8 @@ export class Node {
 	public hCost: number;
 	public parent: Node;
 
+	public HeapIndex: number;
+
 	constructor(w: boolean, wp: Vector, gx: number, gy: number){
 		this.walkable = w;
 		this.worldPosition = wp;
@@ -23,6 +25,14 @@ export class Node {
 
 	public get fCost(): number {
 		return this.gCost + this.hCost;
+	}
+
+	compareTo(nodeToCompare: Node){
+		let compare: number = this.fCost - nodeToCompare.fCost;
+		if (compare === 0){
+			compare = this.hCost - nodeToCompare.hCost;
+		}
+		return -compare;
 	}
 
 }
