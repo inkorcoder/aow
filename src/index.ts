@@ -7,8 +7,8 @@ import { Grid } from './core/grid';
 import { Node } from './core/grid-node';
 import { Object2D } from './core/object';
 import { Render } from "./render/render";
-import { Pathfinding } from './ai/pathfinding';
-
+// import { Pathfinding } from './ai/pathfinding';
+import { PathfindingManager } from './ai/pathfinding-manager';
 
 // let vec1: Vector = new Vector();
 // console.log(vec1);
@@ -42,7 +42,7 @@ let sizeX: number = 30,
 for (let y = 0; y < sizeY; y++){
 	walkable[y] = [];
 	for (let x = 0; x < sizeX; x++){
-		walkable[y].push(1);
+		walkable[y].push(Math.random() < .2 ? 0 : 1);
 	}
 }
 
@@ -58,8 +58,8 @@ let player: Object2D = new Object2D();
 player.position.x = 100;
 player.position.y = 110;
 
-let pathfinder: Pathfinding = new Pathfinding(grid);
-
+// let pathfinder: Pathfinding = new Pathfinding(grid);
+let pathfindingManager: PathfindingManager = new PathfindingManager(grid);
 
 render.width = sizeX*(r*2);
 render.height = sizeY*r;
@@ -73,14 +73,21 @@ render.onRender(()=> {
 
 	let d1 = performance.now();
 	for (let j = 0; j < 1; j++){
-		let path = pathfinder.findPath(new Vector(), player.position);
-		if (path) {
-			for (let i = 0; i < path.length; i++){
-				let p = new Object2D();
-				p.position = grid.nodeCenter(path[i]);
-				p.render(render.ctx);
+		pathfindingManager.enqueue({
+			time: new Date().getTime(),
+			start: new Vector(),
+			target: player.position,
+			callback: (path: any[])=> {
+				// let path = pathfinder.findPath(new Vector(), player.position);
+				if (path) {
+					for (let i = 0; i < path.length; i++){
+						let p = new Object2D();
+						p.position = grid.nodeCenter(path[i]);
+						p.render(render.ctx);
+					}
+				}
 			}
-		}
+		})
 	}
 	let d2 = performance.now();
 	// console.log(((d2-d1)).toFixed(0))

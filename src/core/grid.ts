@@ -15,7 +15,7 @@ export class Grid {
 		this.gridSizeX = sizeX;
 		this.gridSizeY = sizeY;
 		this.nodeRadius = r;
-		this.nodeDiameter = r*2;
+		this.nodeDiameter = r*1.5; // 2
 		this.walkable = walkable;
 		this.createGrid();
 	}

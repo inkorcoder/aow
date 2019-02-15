@@ -7,7 +7,7 @@ export class Pathfinding {
 
 	grid: Grid;
 
-	constructor(grid: Grid){
+	constructor(grid?: Grid){
 		this.grid = grid;
 	}
 
