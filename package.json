@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --mode development",
+    "editor": "webpack-dev-server --mode development --config webpack.config-editor.js",
     "dev": "webpack --mode development",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "build:editor": "webpack --mode production --config webpack.config-editor.js"
   },
   "repository": {
     "type": "git",

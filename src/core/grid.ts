@@ -11,11 +11,11 @@ export class Grid {
 	nodeDiameter: number;
 	walkable: number[][];
 
-	constructor(sizeX = 1, sizeY = 1, walkable: number[][], r: number = 5){
+	constructor(sizeX = 1, sizeY = 1, walkable: number[][], r: number = 5, d: number = 10){
 		this.gridSizeX = sizeX;
 		this.gridSizeY = sizeY;
 		this.nodeRadius = r;
-		this.nodeDiameter = r*1.5; // 2
+		this.nodeDiameter = d; // 2
 		this.walkable = walkable;
 		this.createGrid();
 	}
@@ -44,6 +44,7 @@ export class Grid {
 	}
 
 	nodeCenter(node: Node){
+		if (!node) return new Vector(this.nodeDiameter, this.nodeRadius);
 		return node.worldPosition.clone().scale(this.nodeDiameter, this.nodeRadius).add(new Vector(this.nodeDiameter/2, this.nodeRadius/2));
 	}
 
@@ -63,4 +64,10 @@ export class Grid {
 		return neighbours;
 	}
 
+	nodeCenterByVector(position: Vector): Vector {
+		let x = Math.floor(position.x),
+				y = Math.floor(position.y);
+				console.log(this.grid[y][x]);
+		return this.grid[y][x].worldPosition.scale(this.nodeDiameter, this.nodeRadius);
+	}
 }

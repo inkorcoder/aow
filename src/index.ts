@@ -14,8 +14,8 @@ import { Unit } from './core/unit';
 // let vec1: Vector = new Vector();
 // console.log(vec1);
 
-let sizeX: number = 100,
-		sizeY: number = 100,
+let sizeX: number = 40,
+		sizeY: number = 40,
 		walkable = [],
 		// walkable: number[][] = [
 		// 	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -39,14 +39,21 @@ let sizeX: number = 100,
 		// 	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 		// 	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 		// ],
-		r = 10;
+		r = 15,
+		d = 25;
+
+let availableCells: Vector[] = [];
 for (let y = 0; y < sizeY; y++){
 	walkable[y] = [];
 	for (let x = 0; x < sizeX; x++){
-		walkable[y].push(Math.random() < .05 ? 0 : 1);
+		let isAvailable = Math.random() > .2;
+		if (isAvailable){
+			availableCells.push(new Vector(x, y));
+		}
+		walkable[y].push(isAvailable ? 1 : 0);
 	}
 }
-
+// console.log(availableCells)
 // for (let x = 0; x < sizeX; x++){
 // 	for (let y = 0; y < sizeY; y++){
 
@@ -54,16 +61,18 @@ for (let y = 0; y < sizeY; y++){
 // }
 
 
-let grid: Grid = new Grid(sizeX, sizeY, walkable, r);
+let grid: Grid = new Grid(sizeX, sizeY, walkable, r, d);
 let render: Render = new Render();
 let player: Object2D = new Object2D();
-player.position.x = 130;
-player.position.y = 135;
+
+// player.position = grid.nodeCenterByVector(new Vector(sizeX/2, sizeY/2));
+// player.position = availableCells[Math.floor(availableCells.length*Math.random())].add(new Vector(5,5)).scale(d,r);
+player.position = new Vector(210, 200);
 
 let units: Unit[] = [];
 for (let j = 0; j < 10; j++){
 	let u = new Unit(grid);
-	u.position = new Vector(Math.randomInt(0, sizeX)*r*1.5, Math.randomInt(0, sizeY)*r);
+	u.position = new Vector(Math.randomInt(0, sizeX)*d, Math.randomInt(0, sizeY)*r);
 	if (grid.nodeFromWorldPoint(u.position).walkable){
 		units.push(u);
 	}
@@ -77,7 +86,7 @@ render.height = sizeY*r;
 render.setRects();
 render.onRender(()=> {
 	render.clear();
-	render.renderMap(grid);
+	render.renderGrid(grid);
 	player.render(render.ctx);
 	// let ns = grid.getNeighbours (grid.nodeFromWorldPoint(player.position));
 	// console.log(ns)
@@ -106,7 +115,7 @@ render.onRender(()=> {
 			// 	if (pl.movementManager.path[i+1]){
 			// 		p.rotation = p.position.angleTo(grid.nodeCenter(pl.movementManager.path[i+1])) + Math.PI;
 			// 	}
-			// 	p.render(render.ctx, {radius: 5});
+			// 	p.render(render.ctx, {radius: 7});
 			// }
 		}
 		pl.update();

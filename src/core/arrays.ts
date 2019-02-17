@@ -1,6 +1,8 @@
 interface Array<T> {
 	remove(item: any): void;
 	contains(item: any): boolean;
+	min(): number;
+	max(): number;
 }
 
 Array.prototype.remove = function(item: any): void {
@@ -20,3 +22,11 @@ Array.prototype.contains = function(item: any): boolean {
 	}
 	return false;
 }
+
+Array.prototype.max = function() {
+	return Math.max.apply(null, this);
+};
+
+Array.prototype.min = function() {
+	return Math.min.apply(null, this);
+};
