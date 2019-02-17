@@ -15,6 +15,10 @@ export class Pathfinding {
 		let startNode: Node = this.grid.nodeFromWorldPoint(startPosition);
 		let targetNode: Node = this.grid.nodeFromWorldPoint(targetPosition);
 
+		if (!startNode.walkable || !targetNode.walkable){
+			return [];
+		}
+
 		let openSet: Heap = new Heap();
 		let closedSet: Node[] = [];
 
@@ -57,8 +61,28 @@ export class Pathfinding {
 			path.push(currentNode);
 			currentNode = currentNode.parent;
 		}
-		path.reverse();
-		return path;
+		let waypoints = this.simplifyPath(path);
+		waypoints.reverse();
+		return waypoints;
+		// path.reverse();
+		// return path;
+	}
+
+	simplifyPath(path: Node[]){
+		let waypoints: Node[] = [];
+		let directionOld = new Vector();
+		for (let i = 1; i < path.length; i++){
+			let directionNew = new Vector(
+				path[i-1].gridX - path[i].gridX,
+				path[i-1].gridY - path[i].gridY
+			);
+			if (!directionNew.isEqualTo(directionOld)){
+				waypoints.push(path[i-1]);
+				waypoints.push(path[i]);
+			}
+			directionOld = directionNew;
+		}
+		return waypoints;
 	}
 
 	getDistance(nodeA: Node, nodeB: Node): number {

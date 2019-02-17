@@ -23,13 +23,14 @@ export class Grid {
 	createGrid(){
 		this.grid = [];
 		// let worldB
+		// console.log(this.gridSizeX, this.gridSizeY)
 
 		for (let x = 0; x < this.gridSizeX; x++){
 			for (let y = 0; y < this.gridSizeY; y++){
 				if (!this.grid[y]) {
 					this.grid[y] = [];
 				}
-				this.grid[y][x] = new Node(this.walkable[x][y] !== 0, new Vector(x, y), x, y);
+				this.grid[y][x] = new Node(this.walkable[y][x] !== 0, new Vector(x, y), x, y);
 			}
 		}
 	}

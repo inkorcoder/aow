@@ -37,7 +37,7 @@ export class Render {
 	}
 
 	stop(){
-
+		this.isRunning = false;
 	}
 
 	onRender(callback: Function){
@@ -71,7 +71,7 @@ export class Render {
 			this.ctx.clearRect(0, 0, this.width, this.height);
 			for (let x = 0; x < map.gridSizeX; x++){
 				for (let y = 0; y < map.gridSizeY; y++){
-					if (map.walkable[x][y] === 0){
+					if (map.walkable[y][x] === 0){
 						this.ctx.fillStyle = "#555";
 					} else {
 						this.ctx.fillStyle = "#ddd";
