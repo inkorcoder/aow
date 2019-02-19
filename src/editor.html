@@ -4,20 +4,95 @@
 	<meta charset="UTF-8">
 	<title>Editor</title>
 </head>
-<body>
-	<div>
+<body class="editor">
+
+	<aside class="left">
+		<div class="title">Тип Объектов</div>
+		<select class="input">
+			<option value="grass">Трава / кусты</option>
+			<option value="trees">Деревья</option>
+			<option value="stones">Камни</option>
+			<option value="mountains">Горы</option>
+		</select4>
+
+		<input type="range" class="range">
+
+		<input type="text" class="input">
+
+		<button class="btn">button</button>
+
+		<div class="scrolled" style="height: calc(100% - 200px)">
+			<ul class="objects-list">
+				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+			</ul>
+		</div>
+
+		<footer>
+			
+		</footer>
+	</aside>
+
+	<!-- view -->
+	<div class="view">
 		<canvas></canvas>
 	</div>
-	<span>
-		<b>size</b>
-		<input type="radio" name="size" id="size1" value="128">
-		<label for="size1">128</label>
-		<input type="radio" name="size" id="size2" value="256">
-		<label for="size2">256</label>
-		<input type="radio" name="size" id="size3" value="512">
-		<label for="size3">512</label>
-		<input type="radio" name="size" id="size4" value="1024">
-		<label for="size4">1024</label>
-	</span>
+	<!-- view -->
+
+	<aside class="right">
+		<div class="title">Генератор <small>(Perlin Noise)</small></div>
+		<div class="checkbox offset-bottom">
+			<input type="radio" name="size" id="size1" value="128">
+			<label for="size1">128 <small>&times;</small> 128</label>
+		</div>
+		<div class="checkbox offset-bottom">
+			<input type="radio" name="size" id="size2" value="256" checked>
+			<label for="size2">256 <small>&times;</small> 256</label>
+		</div>
+		<div class="checkbox offset-bottom">
+			<input type="radio" name="size" id="size3" value="512">
+			<label for="size3">512 <small>&times;</small> 512</label>
+		</div>
+		<div class="checkbox offset-bottom">
+			<input type="radio" name="size" id="size4" value="1024">
+			<label for="size4">1024 <small>&times;</small> 1024</label>
+		</div>
+		<div class="title">Размеры</div>
+		<div class="row offset-bottom">
+			<div class="col-xs-6">
+				<input type="range" class="range" min="50" max="150" step="10" value="50" data-output="#inputSizeX">
+				<div class="align-center" id="inputSizeX">50</div>
+			</div>
+			<div class="col-xs-6">
+				<input type="range" class="range" min="50" max="150" step="10" value="50" data-output="#inputSizeY">
+				<div class="align-center" id="inputSizeY">50</div>
+			</div>
+		</div>
+		<div class="title">Тип карты</div>
+		<select class="input">
+			<option value="general">Стандартная</option>
+			<option value="water">Вода</option>
+			<option value="greenery">Зелень</option>
+			<option value="swamp">Грязь</option>
+			<option value="desert">Пустыня</option>
+			<option value="mountains">Горы</option>
+		</select>
+		<hr>
+		<button type="button" class="btn block">Генерировать</button>
+	</aside>
+
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;subset=cyrillic" rel="stylesheet">
+
+
 </body>
 </html>
