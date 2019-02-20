@@ -7,39 +7,59 @@
 <body class="editor">
 
 	<aside class="left">
-		<div class="title">Тип Объектов</div>
-		<select class="input">
-			<option value="grass">Трава / кусты</option>
-			<option value="trees">Деревья</option>
-			<option value="stones">Камни</option>
-			<option value="mountains">Горы</option>
-		</select4>
 
-		<input type="range" class="range">
+		<ul class="tabs">
+			<li class="active" data-set-tab="#modeTabs,#modeObjects">Объекты</li>
+			<li data-set-tab="#modeTabs,#modeWalk">Walk</li>
+			<li data-set-tab="#modeTabs,#modeMap">Map</li>
+		</ul>
 
-		<input type="text" class="input">
-
-		<button class="btn">button</button>
-
-		<div class="scrolled" style="height: calc(100% - 200px)">
-			<ul class="objects-list">
-				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-				<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-			</ul>
+		<div id="modeTabs" class="tabs-content" style="height: calc(100% - 130px);">
+			<div class="tab active" id="modeObjects">
+				<div class="title">Тип Объектов</div>
+				<div class="relative">
+					<select class="input">
+						<option value="grass">Трава / кусты</option>
+						<option value="trees">Деревья</option>
+						<option value="stones">Камни</option>
+						<option value="mountains">Горы</option>
+					</select>
+					<span class="select-arrow"></span>
+				</div>
+				<div class="scrolled offset-top" style="height: calc(100% - 70px)">
+					<ul class="objects-list">
+						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+					</ul>
+				</div>
+			</div>
+			<div class="tab" id="modeWalk">
+				walk
+			</div>
+			<div class="tab" id="modeMap">
+				map
+			</div>
 		</div>
 
 		<footer>
-			
+			<div class="row">
+				<div class="col-xs-12 offset-bottom">
+					<button class="btn block" type="button">Открыть</button>
+				</div>
+				<div class="col-xs-12">
+					<button class="btn block" type="button">Сохранить</button>
+				</div>
+			</div>
 		</footer>
 	</aside>
 
@@ -79,14 +99,17 @@
 			</div>
 		</div>
 		<div class="title">Тип карты</div>
-		<select class="input">
-			<option value="general">Стандартная</option>
-			<option value="water">Вода</option>
-			<option value="greenery">Зелень</option>
-			<option value="swamp">Грязь</option>
-			<option value="desert">Пустыня</option>
-			<option value="mountains">Горы</option>
-		</select>
+		<div class="relative">
+			<span class="select-arrow"></span>
+			<select class="input">
+				<option value="general">Стандартная</option>
+				<option value="water">Вода</option>
+				<option value="greenery">Зелень</option>
+				<option value="swamp">Грязь</option>
+				<option value="desert">Пустыня</option>
+				<option value="mountains">Горы</option>
+			</select>
+		</div>
 		<hr>
 		<button type="button" class="btn block">Генерировать</button>
 	</aside>

@@ -15,31 +15,31 @@ import { noise } from './math/noise';
 import { Input } from './core/input';
 
 
-// console.log(Input.key)
+// // console.log(Input.key)
 
-Input.on('mousedown', (e: Event)=> {
-	// console.log(e);
-})
+// Input.on('mousedown', (e: Event)=> {
+// 	// console.log(e);
+// })
 
-Input.on("mousemove", (e: Event)=> {
-	// console.log(Input.mouse);
-})
+// Input.on("mousemove", (e: Event)=> {
+// 	// console.log(Input.mouse);
+// })
 
-Input.on("dragstart", (e: Event)=> {
-	console.log("dragstart");
-})
+// Input.on("dragstart", (e: Event)=> {
+// 	console.log("dragstart");
+// })
 
-Input.on("drag", (e: Event, vector: Vector)=> {
-	console.log(vector);
-})
+// Input.on("drag", (e: Event, vector: Vector)=> {
+// 	console.log(vector);
+// })
 
-Input.on("dragend", (e: Event)=> {
-	console.log("dragend");
-})
+// Input.on("dragend", (e: Event)=> {
+// 	console.log("dragend");
+// })
 
-Input.on("mousewheel", (e: Event, direction: number, delta: number)=> {
-	console.log(direction);
-})
+// Input.on("mousewheel", (e: Event, direction: number, delta: number)=> {
+// 	console.log(direction);
+// })
 
 let sizeX = 120,
 		sizeY = 120,
@@ -78,8 +78,28 @@ render.onRender(()=> {
 render.start();
 // render.stop();
 
-// console.log()
 
+[].slice.call(document.querySelectorAll('[data-set-tab]')).forEach((node: any)=> {
+	node.addEventListener("mousedown", (e: Event)=> {
+		let tabsContentSelector = node.getAttribute('data-set-tab').split(',')[0],
+			tabSelector = node.getAttribute('data-set-tab').split(',')[1];
+		let tabsContent = document.querySelector(tabsContentSelector);
+		[].slice.call(node.parentNode.children).forEach((tab: any)=> {
+			tab.classList.remove('active');
+		});
+		node.classList.add('active');
+		
+		[].slice.call(tabsContent.children).forEach((tab: any)=> {
+			if (tab.id === tabSelector.replace(/\#/gim, '')){
+				tab.classList.add('active');
+			} else {
+				tab.classList.remove('active');
+			}
+		});
+	})
+});
+/*
+*/
 [].slice.call(document.querySelectorAll('input')).forEach((node: any)=> {
 	node.addEventListener('click', (e: any)=> {
 		let size = 256;
@@ -92,9 +112,8 @@ render.start();
 });
 
 
-
 /*
-
+	Outpur
 */
 [].slice.call(document.querySelectorAll('[data-output]')).forEach((node: any)=> {
 	node.addEventListener('input', (e: any)=> {

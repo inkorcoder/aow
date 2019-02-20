@@ -41,6 +41,12 @@ canvas {
 		background: $bg;
 		padding: 15px;
 
+		footer {
+			position: absolute;
+			bottom: 0; left: 0;
+			width: 100%; height: 100px;
+			padding: 15px;
+		}
 		&.left {
 			left: 0;
 		}
@@ -82,7 +88,7 @@ canvas {
 		font-size: 14px;
 
 		&:hover {
-			color: lighten($grey, 10);
+			background: lighten($input, 5);
 		}
 		&:focus {
 			color: rgba(255,255,255,.8);
@@ -104,11 +110,12 @@ canvas {
 		font-family: $font;
 		border-radius: 3px;
 		border: none;
-		font: $font;
 		font-weight: 700;
 		text-transform: uppercase;
 		font-size: 14px;
 		cursor: pointer;
+		overflow: hidden;
+		text-overflow: ellipsis;
 		text-align: center;
 		box-shadow: 0 1px 0 0 rgba(0,0,0,.2);
 
@@ -124,6 +131,18 @@ canvas {
 			display: block;
 			width: 100%;
 		}
+	}
+	.relative {
+		position: relative;
+	}
+	.select-arrow {
+		display: block;
+		width: 8px; height: 8px;
+		border-left: 2px solid $grey;
+		border-bottom: 2px solid $grey;
+		position: absolute;
+		top: 7px; right: 10px;
+		transform: rotate(-45deg);
 	}
 	.checkbox {
 		position: relative;
@@ -201,20 +220,21 @@ canvas {
 		height: 4px;
 		cursor: default;
 		position: relative;
-		background: darken($dark, 10);
+		background: darken($dark, 5);
 		border-radius: 1px
 	}
 	.range::-webkit-slider-thumb {
 		-webkit-appearance: none;
 		cursor: default;
-		width: 16px;
-		height: 16px;
+		width: 18px;
+		height: 18px;
 		background: $input;
 		top: 50%;
 		cursor: pointer;
 		position: absolute;
 		border-radius: 50%;
-		margin-top: -8px;
+		margin-top: -9px;
+		box-shadow: inset 0 0 0 2px darken($dark, 5);
 	}
 	.range::-webkit-slider-thumb:hover {
 		background: lighten($dark, 10);
@@ -265,6 +285,41 @@ canvas {
 	.scrolled::-webkit-scrollbar-thumb {
 		border-radius: 1px;
 		background: #555
+	}
+
+	/*tabs*/
+	.tabs {
+		display: table;
+		margin: -15px -15px 15px;
+		width: calc(100% + 30px);
+		background: $dark;
+
+		> li {
+			font-size: 12px;
+			font-weight: 600;
+			display: table-cell;
+			padding: 15px;
+			cursor: pointer;
+
+			&:hover {
+				color: rgba(255,255,255,.8);
+			}
+			&.active {
+				color: rgba(255,255,255,.8);
+				box-shadow: inset 0 -2px 0 0 $input;
+			}
+		}
+	}
+	.tabs-content {
+
+		.tab {
+			display: none;
+			height: 100%;
+
+			&.active {
+				display: block;
+			}
+		}
 	}
 
 }
