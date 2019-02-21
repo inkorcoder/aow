@@ -68,10 +68,36 @@
 		<div class="wrapper">
 			<canvas id="noiseRender"></canvas>
 			<canvas id="walkRender"></canvas>
+			<div class="segment" id="segmentPointer">
+				<div class="bg"></div>
+			</div>
 			<!-- <span class="point" id="translation"></span> -->
 		</div>
 	</div>
 	<!-- view -->
+
+	<!-- debug -->
+	<div class="debug">
+		<div class="row">
+			<div class="col-xs-1">
+				<button class="btn small" id="debugSetScale">1</button>&nbsp;
+				scale: <span id="debugScale"></span>
+			</div>
+			<div class="col-xs-1">
+				pos: <span id="debugPositionX"></span>,<span id="debugPositionY"></span>
+			</div>
+			<div class="col-xs-1">
+				mouse: <span id="debugMouseX"></span>,<span id="debugMouseY"></span>
+			</div>
+			<div class="col-xs-1">
+				segment: <span id="debugSegmentX"></span>,<span id="debugSegmentY"></span>
+			</div>
+			<div class="col-xs-1">
+				map segments: <span id="debugMapSegmentsX"></span>,<span id="debugMapSegmentsY"></span>
+			</div>
+		</div>
+	</div>
+	<!-- debug -->
 
 	<aside class="right">
 		<div class="title">Генератор <small>(Perlin Noise)</small></div>
@@ -94,18 +120,18 @@
 		<div class="title">Размеры</div>
 		<div class="row offset-bottom">
 			<div class="col-xs-6">
-				<input type="range" class="range" min="50" max="150" step="10" value="50" data-output="#inputSizeX">
+				<input type="range" id="mapSizeX" class="range" min="50" max="150" step="10" value="50" data-output="#inputSizeX">
 				<div class="align-center" id="inputSizeX">50</div>
 			</div>
 			<div class="col-xs-6">
-				<input type="range" class="range" min="50" max="150" step="10" value="50" data-output="#inputSizeY">
+				<input type="range" id="mapSizeY" class="range" min="50" max="150" step="10" value="50" data-output="#inputSizeY">
 				<div class="align-center" id="inputSizeY">50</div>
 			</div>
 		</div>
 		<div class="title">Тип карты</div>
 		<div class="relative">
 			<span class="select-arrow"></span>
-			<select class="input">
+			<select class="input" id="mapType">
 				<option value="general">Стандартная</option>
 				<option value="water">Вода</option>
 				<option value="greenery">Зелень</option>
@@ -115,7 +141,7 @@
 			</select>
 		</div>
 		<hr>
-		<button type="button" class="btn block">Генерировать</button>
+		<button type="button" class="btn block" id="generateMap">Генерировать</button>
 	</aside>
 
 	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;subset=cyrillic" rel="stylesheet">

@@ -68,7 +68,7 @@ interface mapColors {
 	mountain: string;
 }
 
-enum MapModes {
+export enum MapModes {
 	General = "general",
 	Water = "water",
 	Greenery = "greenery",
