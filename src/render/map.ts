@@ -22,7 +22,7 @@ export class Map {
 		this.size = new Vector(sizeX, sizeY);
 		this.data = data;
 		this.cellSize = new Vector(d, r);
-		this.setMode(MapModes.Mountains);
+		this.setMode(MapModes.General);
 	}
 
 	setMode(mode: MapModes){

@@ -11,8 +11,12 @@ export class Render {
 	isRunning: boolean;
 	onRenderCallbacks: Function[];
 
-	constructor(){
-		this.canvas = document.querySelector('canvas');
+	constructor(canvasSelector?: string){
+		if (canvasSelector){
+			this.canvas = document.querySelector(canvasSelector);
+		} else{
+			this.canvas = document.querySelector('canvas');
+		}
 		this.ctx = this.canvas.getContext("2d");
 		this.setRects();
 		this.isRunning = false;
@@ -23,9 +27,9 @@ export class Render {
 		});
 	}
 
-	setRects(){
-		this.canvas.width = this.width;
-		this.canvas.height = this.height;
+	setRects(width?: number, height?: number){
+		this.canvas.width = width || this.width;
+		this.canvas.height = height || this.height;
 	}
 
 	clear(){

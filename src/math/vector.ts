@@ -38,6 +38,12 @@ class Vector {
 		return this;
 	}
 
+	scaleBy(vector: Vector): Vector {
+		this.x *= vector.x;
+		this.y *= vector.y;
+		return this;
+	}
+
 	distanceTo(vector: Vector): number {
 		return vector.subtract(this).getLength();
 	}

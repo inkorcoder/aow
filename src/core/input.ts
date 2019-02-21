@@ -196,7 +196,7 @@ document.addEventListener("mousedown", (e: MouseEvent)=> {
 	dragstartPosition = new Vector(e.clientX, e.clientY);
 	for (let i = 0; i < Input.subscribers.dragstart.length; i++){
 		if (Input.subscribers.dragstart[i]){
-			Input.subscribers.dragstart[i](e);
+			Input.subscribers.dragstart[i](e, dragstartPosition);
 		}
 	}
 });
