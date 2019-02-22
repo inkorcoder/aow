@@ -59,7 +59,7 @@ let sizeX = 100,
 		type = MapModes.General,
 
 		activeTab: string = "map",
-		mapColor: string = "";
+		mapColor: string = "water";
 
 let mapColors: string[] = ["water","ground","grass","greenery","foot","mountain"];
 
@@ -76,14 +76,21 @@ let segmentPointer: HTMLElement = document.querySelector('#segmentPointer');
 // wrapper.style.height = sizeY*r+"px";
 
 function createMap(){
-	console.log(`Map::creating ${dimension}x${dimension}, size: ${sizeX}x${sizeY}, type: ${type}`);
+	let t1 = performance.now();
 	mapData = noise(dimension, 1, 4, 1, 0);
 	map = new Map(sizeX, sizeY, mapData, r, d);
 	map.setMode(type);
+	map.generateGrid(mapData);
 	transform();
 	noiseRenderer.setRects(sizeX*d, sizeY*r);
 	noiseRenderer.start();
 	noiseRenderer.stop();
+	let t2 = performance.now();
+	console.log(`[ Map::creating ]
+		  perlin:         ${dimension} x ${dimension},
+		  size:           ${sizeX} x ${sizeY},
+		  type:           ${type}
+		  time:           ${(t2-t1).toFixed()} ms`.replace(/\t/gim, ''));
 }
 
 // let grid: Grid = new Grid(sizeX, sizeY, walkable, r, d);
@@ -92,7 +99,7 @@ let noiseRenderer: Render = new Render('#noiseRender');
 noiseRenderer.setRects(sizeX*d, sizeY*r);
 noiseRenderer.onRender(()=> {
 	if (map){
-		noiseRenderer.renderMap(map);
+		noiseRenderer.renderColoredMap(map);
 	}
 });
 noiseRenderer.start();
@@ -145,8 +152,18 @@ transform();
 Input.on('dragstart', (e: any, center: Vector)=> {
 	// console.log(center);
 });
+Input.on('mousedown', (e: any, center: Vector)=> {
+	if (Input.key.ctrl){
+		// console.log(map, segment, mapColor);
+		noiseRenderer.renderColoredMapSegment(map, segment, mapColor);
+	}
+});
 Input.on('drag', (e: any, direction: Vector)=> {
 	// console.log(direction);
+	if (Input.key.ctrl) {
+		noiseRenderer.renderColoredMapSegment(map, segment, mapColor);
+		return;
+	}
 	if (e.target.matches('canvas')){
 		transform(direction);
 	}
@@ -216,6 +233,7 @@ $('#mapSizeY').on("input", (e: any)=> {
 	sizeY = parseInt(e.target.value);
 });
 $('#mapType').on("change", (e: any)=> {
+	console.log(e.target.value)
 	type = e.target.value;
 });
 $('[data-map-color]').click(function(e: any){

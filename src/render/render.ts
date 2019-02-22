@@ -1,5 +1,6 @@
 import { Map } from "./map";
 import { Grid } from "./../core/grid";
+import { Vector } from "./../math/vector";
 
 export class Render {
 
@@ -70,40 +71,23 @@ export class Render {
 
 	}
 
-	renderMap(map: Map){
+	renderColoredMap(map: Map){
 		if (map){
-			// this.ctx.clearRect(0, 0, this.width, this.height);
 			for (let x = 0; x < map.size.x; x++){
 				for (let y = 0; y < map.size.y; y++){
-					// console.log(map.data[y][x]);
-					// if (map.data[y][x] === 0){
-					// 	this.ctx.fillStyle = "#555";
-					// } else {
-					// 	this.ctx.fillStyle = "#ddd";
-					// }
-					// this.ctx.fillStyle = map.colors.mountain;
-					let v = map.data[y][x];
-					if (v <= map.layers.water){
-						this.ctx.fillStyle = map.colors.water;
-					} else if (v <= map.layers.ground){
-						this.ctx.fillStyle = map.colors.ground;
-					} else if (v <= map.layers.grass){
-						this.ctx.fillStyle = map.colors.grass;
-					} else if (v <= map.layers.greenery){
-						this.ctx.fillStyle = map.colors.greenery;
-					} else if (v <= map.layers.foot){
-						this.ctx.fillStyle = map.colors.foot;
-					} else {
-						this.ctx.fillStyle = map.colors.mountain;
-					}
-					// this.ctx.fillStyle = `rgb(${v/1*255},${v/1*255},${v/1*255})`;
-					// this.ctx.fillStyle = "#ddd";
+					let key: string = map.colorsArray[map.data[y][x]];
+					this.ctx.fillStyle = map.colors[key];
 					this.ctx.fillRect(x*map.cellSize.x, y*map.cellSize.y, map.cellSize.x, map.cellSize.y);
-					// this.ctx.fillStyle = "#999";
-					// this.ctx.fillText(map.data[y][x].toString(), x*map.cellSize.x+2, y*map.cellSize.y+12);
 				}
 			}
 		}
+	}
+
+	renderColoredMapSegment(map: Map, segment: Vector, color: string){
+		map.data[segment.y][segment.x] = map.colorsKeys[color];
+		let key: string = map.colorsArray[map.data[segment.y][segment.x]];
+		this.ctx.fillStyle = map.colors[key];
+		this.ctx.fillRect(segment.x*map.cellSize.x, segment.y*map.cellSize.y, map.cellSize.x, map.cellSize.y);
 	}
 
 	renderGrid(map: Grid){

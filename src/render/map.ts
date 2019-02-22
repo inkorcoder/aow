@@ -19,9 +19,22 @@ export class Map {
 		mountain: "#fff"
 	};
 
+	colorsArray: string[] = [
+		"water", "ground", "grass", "greenery", "foot", "mountain"
+	];
+
+	colorsKeys: mapColorsInt = {
+		water: 0,
+		ground: 1,
+		grass: 2,
+		greenery: 3,
+		foot: 4,
+		mountain: 5
+	}
+
 	constructor(sizeX: number = 0, sizeY: number = 0, data: number[][], r: number = 5, d: number = 10){
 		this.size = new Vector(sizeX, sizeY);
-		this.data = data;
+		this.data = [];
 		this.cellSize = new Vector(d, r);
 		this.setMode(MapModes.General);
 	}
@@ -51,6 +64,30 @@ export class Map {
 		this.layers = layers;
 	}
 
+	generateGrid(data: number[][]){
+		for (let x = 0; x < this.size.x; x++){
+			for (let y = 0; y < this.size.y; y++){
+				if (!this.data[y]){
+					this.data[y] = [];
+				}
+				let v = data[y][x];
+				if (v <= this.layers.water){
+					this.data[y][x] = 0;
+				} else if (v <= this.layers.ground){
+					this.data[y][x] = 1;
+				} else if (v <= this.layers.grass){
+					this.data[y][x] = 2;
+				} else if (v <= this.layers.greenery){
+					this.data[y][x] = 3;
+				} else if (v <= this.layers.foot){
+					this.data[y][x] = 4;
+				} else {
+					this.data[y][x] = 5;
+				}
+			}
+		}
+	}
+
 }
 
 interface mapLayers {
@@ -63,12 +100,23 @@ interface mapLayers {
 }
 
 interface mapColors {
+	[key:string]: string;
 	water: string;
 	ground: string;
 	grass: string;
 	greenery: string;
 	foot: string;
 	mountain: string;
+}
+
+interface mapColorsInt {
+	[key:string]: number;
+	water: number;
+	ground: number;
+	grass: number;
+	greenery: number;
+	foot: number;
+	mountain: number;
 }
 
 export enum MapModes {

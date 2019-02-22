@@ -188,12 +188,12 @@ document.addEventListener('keyup', (e: KeyboardEvent)=> {
 document.addEventListener("mousedown", (e: MouseEvent)=> {
 	isDradding = true;
 
+	dragstartPosition = new Vector(e.clientX, e.clientY);
 	for (let i = 0; i < Input.subscribers.mousedown.length; i++){
 		if (Input.subscribers.mousedown[i]){
-			Input.subscribers.mousedown[i](e);
+			Input.subscribers.mousedown[i](e, dragstartPosition);
 		}
 	}
-	dragstartPosition = new Vector(e.clientX, e.clientY);
 	for (let i = 0; i < Input.subscribers.dragstart.length; i++){
 		if (Input.subscribers.dragstart[i]){
 			Input.subscribers.dragstart[i](e, dragstartPosition);
