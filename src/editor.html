@@ -9,13 +9,13 @@
 	<aside class="left">
 
 		<ul class="tabs">
-			<li class="active" data-set-tab="#modeTabs,#modeObjects">Объекты</li>
-			<li data-set-tab="#modeTabs,#modeWalk">Walk</li>
-			<li data-set-tab="#modeTabs,#modeMap">Map</li>
+			<li data-set-tab="#modeTabs,#modeObjects,objects">Объекты</li>
+			<li data-set-tab="#modeTabs,#modeWalk,walk">Walk</li>
+			<li class="active" data-set-tab="#modeTabs,#modeMap,map">Map</li>
 		</ul>
 
 		<div id="modeTabs" class="tabs-content" style="height: calc(100% - 130px);">
-			<div class="tab active" id="modeObjects">
+			<div class="tab" id="modeObjects">
 				<div class="title">Тип Объектов</div>
 				<div class="relative">
 					<select class="input">
@@ -46,8 +46,16 @@
 			<div class="tab" id="modeWalk">
 				walk
 			</div>
-			<div class="tab" id="modeMap">
-				map
+			<div class="tab active" id="modeMap">
+				<div class="title">Карта</div>
+				<ul class="clear colors-list">
+					<li data-map-color="water" class="active"><div class="color" style="background: #519ddb"></div>water</li>
+					<li data-map-color="ground"><div class="color" style="background: #999da3"></div>ground</li>
+					<li data-map-color="grass"><div class="color" style="background: #5eb57c"></div>grass</li>
+					<li data-map-color="greenery"><div class="color" style="background: #53825e"></div>greenery</li>
+					<li data-map-color="foot"><div class="color" style="background: #d1c5ab"></div>foot</li>
+					<li data-map-color="mountain"><div class="color" style="background: #fff"></div>mountain</li>
+				</ul>
 			</div>
 		</div>
 
@@ -106,26 +114,30 @@
 			<label for="size1">128 <small>&times;</small> 128</label>
 		</div>
 		<div class="checkbox offset-bottom">
-			<input type="radio" name="size" id="size2" value="256" checked>
+			<input type="radio" name="size" id="size2" value="256">
 			<label for="size2">256 <small>&times;</small> 256</label>
 		</div>
 		<div class="checkbox offset-bottom">
-			<input type="radio" name="size" id="size3" value="512">
+			<input type="radio" name="size" id="size3" value="512" checked>
 			<label for="size3">512 <small>&times;</small> 512</label>
 		</div>
 		<div class="checkbox offset-bottom">
 			<input type="radio" name="size" id="size4" value="1024">
 			<label for="size4">1024 <small>&times;</small> 1024</label>
 		</div>
+		<div class="checkbox offset-bottom">
+			<input type="radio" name="size" id="size5" value="2048">
+			<label for="size5">2048 <small>&times;</small> 2048</label>
+		</div>
 		<div class="title">Размеры</div>
 		<div class="row offset-bottom">
 			<div class="col-xs-6">
-				<input type="range" id="mapSizeX" class="range" min="50" max="150" step="10" value="50" data-output="#inputSizeX">
-				<div class="align-center" id="inputSizeX">50</div>
+				<input type="range" id="mapSizeX" class="range" min="50" max="150" step="10" value="100" data-output="#inputSizeX">
+				<div class="align-center" id="inputSizeX">100</div>
 			</div>
 			<div class="col-xs-6">
-				<input type="range" id="mapSizeY" class="range" min="50" max="150" step="10" value="50" data-output="#inputSizeY">
-				<div class="align-center" id="inputSizeY">50</div>
+				<input type="range" id="mapSizeY" class="range" min="50" max="150" step="10" value="100" data-output="#inputSizeY">
+				<div class="align-center" id="inputSizeY">100</div>
 			</div>
 		</div>
 		<div class="title">Тип карты</div>

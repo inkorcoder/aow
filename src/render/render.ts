@@ -89,6 +89,8 @@ export class Render {
 						this.ctx.fillStyle = map.colors.ground;
 					} else if (v <= map.layers.grass){
 						this.ctx.fillStyle = map.colors.grass;
+					} else if (v <= map.layers.greenery){
+						this.ctx.fillStyle = map.colors.greenery;
 					} else if (v <= map.layers.foot){
 						this.ctx.fillStyle = map.colors.foot;
 					} else {

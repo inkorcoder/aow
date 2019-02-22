@@ -13,6 +13,7 @@ import { PathfindingManager } from './ai/pathfinding-manager';
 import { Unit } from './core/unit';
 import { noise } from './math/noise';
 import { Input } from './core/input';
+import { $ } from './core/dom';
 
 
 // // console.log(Input.key)
@@ -41,21 +42,27 @@ import { Input } from './core/input';
 // 	console.log(direction);
 // })
 
-let sizeX = 50,
-		sizeY = 50,
+let sizeX = 100,
+		sizeY = 100,
 		r = 10,
 		d = 15,
 		walkable = [],
 		mapData,
-		scale = 1,
-		oldScale = 1,
+		scale = .25,
+		oldScale = .25,
 		dimension = 256,
 		center = new Vector(),
 		centerPoint = new Vector(),
 		translation = new Vector(),
 		lastPosition = new Vector(),
 		segment = new Vector(),
-		type = MapModes.General;
+		type = MapModes.General,
+
+		activeTab: string = "map",
+		mapColor: string = "";
+
+let mapColors: string[] = ["water","ground","grass","greenery","foot","mountain"];
+
 let view: HTMLElement = document.querySelector('.view');
 let wrapper: HTMLElement = document.querySelector('.view .wrapper');
 let segmentPointer: HTMLElement = document.querySelector('#segmentPointer');
@@ -126,9 +133,9 @@ function transform(direction?: Vector, origin?: Vector){
 	oldScale = scale;
 	noiseRenderer.start();
 	noiseRenderer.stop();
-	document.querySelector('#debugScale').innerHTML = (scale * 100).toFixed()+"%";
-	document.querySelector('#debugPositionX').innerHTML = (translation.x).toFixed();
-	document.querySelector('#debugPositionY').innerHTML = (translation.y).toFixed();
+	$('#debugScale').html((scale * 100).toFixed()+"%");
+	$('#debugPositionX').html((translation.x).toFixed());
+	$('#debugPositionY').html((translation.y).toFixed());
 }
 transform();
 
@@ -153,12 +160,12 @@ Input.on('mousemove', (e: MouseEvent)=> {
 	let bbox = wrapper.getBoundingClientRect();
 	let x = Math.clamp((Input.mouse.x - bbox.left) / bbox.width, 0, 1),
 			y = Math.clamp((Input.mouse.y - bbox.top) / bbox.height, 0, 1);
-	document.querySelector('#debugMouseX').innerHTML = (x * bbox.width).toFixed();
-	document.querySelector('#debugMouseY').innerHTML = (y * bbox.height).toFixed();
+	$('#debugMouseX').html((x * bbox.width).toFixed());
+	$('#debugMouseY').html((y * bbox.height).toFixed());
 	segment.x = Math.floor((x * bbox.width) / (d * scale));
 	segment.y = Math.floor((y * bbox.height) / (r * scale));
-	document.querySelector('#debugSegmentX').innerHTML = segment.x.toString();
-	document.querySelector('#debugSegmentY').innerHTML = segment.y.toString();
+	$('#debugSegmentX').html(segment.x.toString());
+	$('#debugSegmentY').html(segment.y.toString());
 	if (map){
 		segmentPointer.style.left = (segment.x / sizeX * bbox.width)+"px";
 		segmentPointer.style.top = (segment.y / sizeY * bbox.height)+"px";
@@ -185,71 +192,70 @@ Input.on('mousewheel', (e: any, direction: number, delta: number)=> {
 	}
 });
 
+Input.on('keydown', (e: KeyboardEvent)=> {
+	if (activeTab === "map"){
+		if (parseInt(e.key) < 7){
+			mapColor = mapColors[parseInt(e.key)-1];
+			$(`[data-map-color="${mapColor}"]`).addClass('active').siblings().removeClass('active');
+		}
+	}
+});
+
 
 /*
 	MAP
 */
-[].slice.call(document.querySelectorAll('[name="size"]')).forEach((node: any)=> {
-	node.addEventListener('click', ()=> {
-		dimension = parseInt(node.value);
-	});
+$('[name="size"]').click(function(e: any){
+	dimension = parseInt(this.value);
 });
-document.querySelector('#mapSizeX').addEventListener("input", (e: any)=> {
+
+$('#mapSizeX').on("input", (e: any)=> {
 	sizeX = parseInt(e.target.value);
 });
-document.querySelector('#mapSizeY').addEventListener("input", (e: any)=> {
+$('#mapSizeY').on("input", (e: any)=> {
 	sizeY = parseInt(e.target.value);
 });
-document.querySelector('#mapType').addEventListener("change", (e: any)=> {
+$('#mapType').on("change", (e: any)=> {
 	type = e.target.value;
 });
-
-
-document.querySelector('#generateMap').addEventListener("click", ()=> {
-	createMap();
-	document.querySelector('#debugMapSegmentsX').innerHTML = sizeX.toString();
-	document.querySelector('#debugMapSegmentsY').innerHTML = sizeY.toString();
+$('[data-map-color]').click(function(e: any){
+	mapColor = mapColors[$(this).index()];
+	$(`[data-map-color="${mapColor}"]`).addClass('active').siblings().removeClass('active');
 });
 
 
-[].slice.call(document.querySelectorAll('[data-set-tab]')).forEach((node: any)=> {
-	node.addEventListener("mousedown", (e: Event)=> {
-		let tabsContentSelector = node.getAttribute('data-set-tab').split(',')[0],
-			tabSelector = node.getAttribute('data-set-tab').split(',')[1];
-		let tabsContent = document.querySelector(tabsContentSelector);
-		[].slice.call(node.parentNode.children).forEach((tab: any)=> {
-			tab.classList.remove('active');
-		});
-		node.classList.add('active');
-		
-		[].slice.call(tabsContent.children).forEach((tab: any)=> {
-			if (tab.id === tabSelector.replace(/\#/gim, '')){
-				tab.classList.add('active');
+$('#generateMap').click(()=> {
+	createMap();
+	$('#debugMapSegmentsX').html(sizeX.toString());
+	$('#debugMapSegmentsY').html(sizeY.toString());
+});
+
+
+$('[data-set-tab]').map((node: any, index: number)=> {
+	$(node).click((e: Event)=> {
+		let attribute: any = $(node).attr('data-set-tab').split(',');
+		let [ tabsContentSelector, tabSelector, tabType ] = attribute;
+		let tabsContent = $(tabsContentSelector);
+		$(node).siblings().removeClass('active');
+		$(node).addClass('active');
+		activeTab = tabType;
+		$(".tab", tabsContent).each((tab: any)=> {
+			if ($(tab).attr('id') === tabSelector.replace(/\#/gim, '')){
+				$(tab).addClass('active');
 			} else {
-				tab.classList.remove('active');
+				$(tab).removeClass('active');
 			}
 		});
-	})
+	});
 });
 
-/*
-*/
-// [].slice.call(document.querySelectorAll('input')).forEach((node: any)=> {
-// 	node.addEventListener('click', (e: any)=> {
-// 		let size = 256;
-// 		if (e.target.name === 'size'){
-// 			size = parseInt(e.target.value);
-// 		}
-// 		createMap(size);
-// 	});
-// });
 
 /*
 	Output
 */
-[].slice.call(document.querySelectorAll('[data-output]')).forEach((node: any)=> {
-	node.addEventListener('input', (e: any)=> {
-		document.querySelector(node.getAttribute('data-output')).innerHTML = e.target.value;
+$('[data-output]').each((node: any)=> {
+	$(node).on('input', (e: any)=> {
+		$($(node).attr('data-output')).html(e.target.value);
 	});
 });
 
@@ -257,7 +263,7 @@ document.querySelector('#generateMap').addEventListener("click", ()=> {
 /*
 	DEBUG
 */
-document.querySelector('#debugSetScale').addEventListener("mousedown", ()=> {
+$('#debugSetScale').click(()=> {
 	scale = 1;
 	translation.x = 0;
 	translation.y = 0;

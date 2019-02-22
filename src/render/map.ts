@@ -14,6 +14,7 @@ export class Map {
 		water: "#519ddb",
 		ground: "#999da3",
 		grass: "#5eb57c",
+		greenery: "#53825e",
 		foot: "#d1c5ab",
 		mountain: "#fff"
 	};
@@ -29,22 +30,22 @@ export class Map {
 		var layers: mapLayers;
 		switch(mode){
 			case MapModes.General:
-				layers = {water: .7, ground: .77, grass: .95, foot: .98, mountain: 10};
+				layers = {water: .7, ground: .77, grass: .88, greenery: .95, foot: .98, mountain: 10};
 				break;
 			case MapModes.Water:
-				layers = {water: .85, ground: 1, grass: 1000, foot: 1000, mountain: 1000};
+				layers = {water: .85, ground: 1, grass: 1000, greenery: 1000, foot: 1000, mountain: 1000};
 				break;
 			case MapModes.Greenery:
-				layers = {water: .7, ground: .8, grass: 1, foot: 1000, mountain: 1000};
+				layers = {water: .7, ground: .8, grass: .88, greenery: 1, foot: 1000, mountain: 1000};
 				break;
 			case MapModes.Swamp:
-				layers = {water: .7, ground: .95, grass: 1, foot: 1000, mountain: 1000};
+				layers = {water: .7, ground: .95, grass: .98, greenery: 1, foot: 1000, mountain: 1000};
 				break;
 			case MapModes.Desert:
-				layers = {water: 0, ground: 0, grass: .7, foot: 1, mountain: 1};
+				layers = {water: 0, ground: 0, grass: .7, greenery: .8, foot: 1, mountain: 1};
 				break;
 			case MapModes.Mountains:
-				layers = {water: 0, ground: 0, grass: 0, foot: .9, mountain: 1};
+				layers = {water: 0, ground: 0, grass: .7, greenery: .8, foot: .9, mountain: 1};
 				break;
 		}
 		this.layers = layers;
@@ -56,6 +57,7 @@ interface mapLayers {
 	water: number;
 	ground: number;
 	grass: number;
+	greenery: number;
 	foot: number;
 	mountain: number;
 }
@@ -64,6 +66,7 @@ interface mapColors {
 	water: string;
 	ground: string;
 	grass: string;
+	greenery: string;
 	foot: string;
 	mountain: string;
 }
