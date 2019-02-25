@@ -22,6 +22,16 @@ canvas {
 	display: block;
 }
 
+.clear {
+	display: block;
+	list-style: none;
+
+	> li {
+		display: block;
+		list-style: none;
+	}
+}
+
 /*
 	E D I T O R
 */
@@ -96,6 +106,69 @@ canvas {
 			.bg {
 				width: 100%; height: 100%;
 				box-shadow: 0 0 0 2px $dark;
+			}
+		}
+		.texturer {
+			position: absolute;
+			z-index: 5;
+			top: 0; left: 0;
+
+			.heading {
+				position: absolute;
+				bottom: 100%;
+				left: 50%;
+				width: 60px;
+				line-height: 20px;
+				font-size: 14px;
+				color: rgba(255,255,255,.7);
+				text-align: center;
+				margin-left: -30px;
+				pointer-events: none;
+				background: $bg;
+				border-radius: 3px;
+				margin-bottom: 10px;
+				z-index: 2;
+
+				&:after {
+					content: '';
+					display: block;
+					width: 8px; height: 8px;
+					position: absolute;
+					z-index: 1;
+					bottom: 0; left: 50%;
+					margin-bottom: -4px;
+					margin-left: -4px;
+					background: $bg;
+					transform: rotate(45deg);
+				}
+			}
+
+			.textures-list {
+				border: 1px solid darken($dark, 10);
+				width: 32px;
+				margin: 0;
+				padding: 0;
+
+				li {
+					display: block;
+					width: 100%;
+					background: $bg;
+					border-top: 1px solid darken($dark, 10);
+					border-radius: 1px;
+
+					&:first-child {
+						border: none;
+					}
+					&.active {
+						position: relative;
+						z-index: 2;
+						box-shadow: 0 0 0 4px $bg;
+					}
+				}
+				img {
+					display: block;
+					width: 30px; height: 20px;
+				}
 			}
 		}
 	}

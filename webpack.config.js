@@ -25,6 +25,19 @@ module.exports = {
 				]
 			},
 			{
+				test: /\.(png|jpg|gif|svg)$/,
+				use: [
+					{
+						loader: 'file-loader',
+						options: {
+							name: '[name].[ext]',
+							outputPath: 'assets',
+							publicPath: 'assets'
+						},
+					},
+				],
+			},
+			{
 				test: /\.scss$/,
 				use: ExtractTextPlugin.extract({
 					fallback: 'style-loader',

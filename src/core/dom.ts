@@ -124,6 +124,21 @@ export function $(selector: any, context?: any) {
 		traverse(processor);
 	};
 
+	nodes.css = function(property: any, value?: string){
+		if (typeof property === "string"){
+			traverse((node: any)=> {
+				node.style[dashToCamel(property)] = value;
+			});
+			return nodes;
+		}
+		traverse((node: any)=> {
+			for (let key in property){
+				node.style[key] = property[key];
+			}
+		});
+		return nodes;
+	}
+
 	return nodes;
 }
 
@@ -132,4 +147,8 @@ export interface DOMSelection {
 	length: number;
 };
 
-
+function dashToCamel(string: string){
+	return string.replace(/-_([a-z])/g, function(g){
+		return g[1].toUpperCase();
+	});
+};

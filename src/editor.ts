@@ -42,14 +42,14 @@ import { $ } from './core/dom';
 // 	console.log(direction);
 // })
 
-let sizeX = 100,
-		sizeY = 100,
-		r = 10,
-		d = 15,
+let sizeX = 50,
+		sizeY = 50,
+		r = 20,
+		d = 30,
 		walkable = [],
 		mapData,
-		scale = .25,
-		oldScale = .25,
+		scale = .5,
+		oldScale = .5,
 		dimension = 256,
 		center = new Vector(),
 		centerPoint = new Vector(),
@@ -60,6 +60,22 @@ let sizeX = 100,
 
 		activeTab: string = "map",
 		mapColor: string = "water";
+
+class Texturer {
+	private _slice: number[] = [];
+	get slice(){
+		return this._slice;
+	}
+	set slice(newSlice: number[]){
+		console.log(newSlice);
+		this._slice = newSlice;
+	}
+}
+
+let texturer: Texturer = new Texturer();
+
+// texturer.slice = [0,1];
+// console.log(texturer.slice);
 
 let mapColors: string[] = ["water","ground","grass","greenery","foot","mountain"];
 
@@ -87,10 +103,10 @@ function createMap(){
 	noiseRenderer.stop();
 	let t2 = performance.now();
 	console.log(`[ Map::creating ]
-		  perlin:         ${dimension} x ${dimension},
-		  size:           ${sizeX} x ${sizeY},
-		  type:           ${type}
-		  time:           ${(t2-t1).toFixed()} ms`.replace(/\t/gim, ''));
+			perlin:         ${dimension} x ${dimension},
+			size:           ${sizeX} x ${sizeY},
+			type:           ${type}
+			time:           ${(t2-t1).toFixed()} ms`.replace(/\t/gim, ''));
 }
 
 // let grid: Grid = new Grid(sizeX, sizeY, walkable, r, d);
@@ -153,23 +169,29 @@ Input.on('dragstart', (e: any, center: Vector)=> {
 	// console.log(center);
 });
 Input.on('mousedown', (e: any, center: Vector)=> {
-	if (Input.key.ctrl){
-		// console.log(map, segment, mapColor);
-		noiseRenderer.renderColoredMapSegment(map, segment, mapColor);
+	if (activeTab === "map"){
+		if (Input.key.ctrl && e.which === 1){
+			noiseRenderer.renderColoredMapSegment(map, segment, mapColor);
+		} else if (!Input.key.ctrl && e.which === 1 && e.target.matches && e.target.matches('canvas')) {
+			let bbox = wrapper.getBoundingClientRect();
+			$('#texturer').css("left", ((segment.x + 2) * d * scale / bbox.width * 100)+"%");
+			$('#texturer').css("top", (segment.y * r * scale / bbox.height * 100)+"%");
+		}
 	}
 });
 Input.on('drag', (e: any, direction: Vector)=> {
-	// console.log(direction);
-	if (Input.key.ctrl) {
-		noiseRenderer.renderColoredMapSegment(map, segment, mapColor);
-		return;
+	if (activeTab === "map"){
+		if (Input.key.ctrl && e.which === 1) {
+			noiseRenderer.renderColoredMapSegment(map, segment, mapColor);
+			return;
+		}
 	}
-	if (e.target.matches('canvas')){
+	if (e.target.matches && e.target.matches('canvas') && e.which === 2){
 		transform(direction);
 	}
 });
 Input.on('dragend', (e: any)=> {
-	if (e.target.matches('canvas')){
+	if (e.target.matches && e.target.matches('canvas')){
 		center = translation.clone();
 	}
 });
@@ -197,7 +219,7 @@ Input.on('mousewheel', (e: any, direction: number, delta: number)=> {
 		-0.5 + (Input.mouse.x - bbox.left) / bbox.width,
 		-0.5 + (Input.mouse.y - bbox.top) / bbox.height
 	);
-	if (e.target.matches('canvas')){
+	if (e.target.matches && e.target.matches('canvas')){
 		let origin = Input.mouse.clone().subtract(new Vector(bbox.left, bbox.top));
 		if (direction < 0){
 			if (scale < 5) scale *= 2;
