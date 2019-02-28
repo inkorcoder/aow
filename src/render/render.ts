@@ -83,6 +83,22 @@ export class Render {
 		}
 	}
 
+	renderTexturedMap(map: Map, textures: string[], indexes: number[][]){
+		if (map){
+			// console.log(textures, indexes)
+			for (let x = 0; x < map.size.x; x++){
+				for (let y = 0; y < map.size.y; y++){
+					let groundtype = Math.clamp(map.data[y][x]-1, 0, 4);
+					// console.log(groundtype)
+					let tile: any = textures[indexes[groundtype][Math.floor(indexes[groundtype].length*Math.random())]];
+					this.ctx.putImageData(tile, x*map.cellSize.x, y*map.cellSize.y);
+					// this.ctx.fillStyle = map.colors[key];
+					// this.ctx.fillRect(x*map.cellSize.x, y*map.cellSize.y, map.cellSize.x, map.cellSize.y);
+				}
+			}
+		}
+	}
+
 	renderColoredMapSegment(map: Map, segment: Vector, color: string){
 		map.data[segment.y][segment.x] = map.colorsKeys[color];
 		let key: string = map.colorsArray[map.data[segment.y][segment.x]];

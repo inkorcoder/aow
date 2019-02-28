@@ -11,6 +11,7 @@ import { Map, MapModes } from "./render/map";
 // import { Pathfinding } from './ai/pathfinding';
 import { PathfindingManager } from './ai/pathfinding-manager';
 import { Unit } from './core/unit';
+import { Texturer } from './core/texturer';
 import { noise } from './math/noise';
 import { Input } from './core/input';
 import { $ } from './core/dom';
@@ -42,6 +43,7 @@ import { $ } from './core/dom';
 // 	console.log(direction);
 // })
 
+
 let sizeX = 50,
 		sizeY = 50,
 		r = 20,
@@ -61,21 +63,39 @@ let sizeX = 50,
 		activeTab: string = "map",
 		mapColor: string = "water";
 
-class Texturer {
-	private _slice: number[] = [];
-	get slice(){
-		return this._slice;
+// console.dir();
+function insertTexturerView(page: number = 0, pagination: number = 9){
+	let texturesHtml: string = "";
+	let array = Texturer.samples.ground.slice(page*pagination, (page+1)*pagination);
+	$('.texturer span').html("("+page*pagination+"-"+(page+1)*pagination+")");
+	for (let i = 0; i < array.length; i++){
+		// if (i < 54) continue;
+		texturesHtml += `<li data-index="${page*pagination+i}"><img src="${array[i]}"></li>`;
 	}
-	set slice(newSlice: number[]){
-		console.log(newSlice);
-		this._slice = newSlice;
+	$('.textures-list').html(texturesHtml);
+};
+insertTexturerView();
+
+class TexturerView {
+	private _page: number = 0;
+	private _pagination: number = 0;
+	get page(){ return this._page; }
+	set page(newpage: number){
+		this._page = newpage;
+		insertTexturerView(this.page, this.pagination);
+	}
+	get pagination(){ return this._pagination; }
+	set pagination(newpagination: number){
+		this._pagination = newpagination;
+		insertTexturerView(this.page, this.pagination);
 	}
 }
 
-let texturer: Texturer = new Texturer();
+let texturer: TexturerView = new TexturerView();
 
-// texturer.slice = [0,1];
-// console.log(texturer.slice);
+texturer.page = 0;
+texturer.pagination = 9*3;
+// console.log(texturer);
 
 let mapColors: string[] = ["water","ground","grass","greenery","foot","mountain"];
 
@@ -98,9 +118,9 @@ function createMap(){
 	map.setMode(type);
 	map.generateGrid(mapData);
 	transform();
-	noiseRenderer.setRects(sizeX*d, sizeY*r);
-	noiseRenderer.start();
-	noiseRenderer.stop();
+	texturedMapRenderer.setRects(sizeX*d, sizeY*r);
+	texturedMapRenderer.start();
+	texturedMapRenderer.stop();
 	let t2 = performance.now();
 	console.log(`[ Map::creating ]
 			perlin:         ${dimension} x ${dimension},
@@ -112,14 +132,33 @@ function createMap(){
 // let grid: Grid = new Grid(sizeX, sizeY, walkable, r, d);
 let map: Map;
 let noiseRenderer: Render = new Render('#noiseRender');
+let texturedMapRenderer: Render = new Render('#texturedMapRender');
+
 noiseRenderer.setRects(sizeX*d, sizeY*r);
-noiseRenderer.onRender(()=> {
+texturedMapRenderer.setRects(sizeX*d, sizeY*r);
+
+// noiseRenderer.onRender(()=> {
+// 	if (map){
+// 		noiseRenderer.renderColoredMap(map);
+// 	}
+// });
+// noiseRenderer.start();
+// noiseRenderer.stop();
+
+let textrs: any = [
+	[4, 18, 19, 20],
+	[13, 40, 45, 46, 47],
+	[31, 67, 72, 73, 74],
+	[85, 99, 100, 101],
+	[94]
+];
+texturedMapRenderer.onRender(()=> {
 	if (map){
-		noiseRenderer.renderColoredMap(map);
+		texturedMapRenderer.renderTexturedMap(map, Texturer.data.ground, textrs);
 	}
 });
-noiseRenderer.start();
-noiseRenderer.stop();
+texturedMapRenderer.start();
+texturedMapRenderer.stop();
 
 
 function transform(direction?: Vector, origin?: Vector){
@@ -228,6 +267,13 @@ Input.on('mousewheel', (e: any, direction: number, delta: number)=> {
 			if (scale > 0.2) scale /= 2;
 			transform(null, origin);
 		}
+	} else if (e.target.matches && e.target.matches('.texturer, .texturer *')){
+		if (direction < 0){
+			texturer.page--;
+		} else {
+			texturer.page++;
+		}
+		texturer.page = Math.clamp(texturer.page, 0, 3);
 	}
 });
 
@@ -237,6 +283,10 @@ Input.on('keydown', (e: KeyboardEvent)=> {
 			mapColor = mapColors[parseInt(e.key)-1];
 			$(`[data-map-color="${mapColor}"]`).addClass('active').siblings().removeClass('active');
 		}
+	}
+	if (e.keyCode === 27){
+		$('#texturer').css("left", "-1000px");
+		$('#texturer').css("top", "-1000px");
 	}
 });
 
@@ -287,6 +337,10 @@ $('[data-set-tab]').map((node: any, index: number)=> {
 			}
 		});
 	});
+});
+
+$('#addTextures').on('click', (e: any)=> {
+
 });
 
 

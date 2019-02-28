@@ -56,6 +56,9 @@
 					<li data-map-color="foot"><div class="color" style="background: #d1c5ab"></div>foot</li>
 					<li data-map-color="mountain"><div class="color" style="background: #fff"></div>mountain</li>
 				</ul>
+				<hr>
+				<div class="title">Текстура</div>
+				<button class="btn block" type="button" id="addTextures">Текстурировать</button>
 			</div>
 		</div>
 
@@ -75,20 +78,15 @@
 	<div class="view">
 		<div class="wrapper">
 			<canvas id="noiseRender"></canvas>
+			<canvas id="texturedMapRender"></canvas>
 			<canvas id="walkRender"></canvas>
 			<div class="segment" id="segmentPointer">
 				<div class="bg"></div>
 			</div>
-			<div class="texturer" id="texturer">
-				<div class="heading">Texturer</div>
+			<div class="texturer" id="texturer" style="left: -1000px;">
+				<div class="heading">Texturer <span></span></div>
 				<ul class="clear textures-list">
-					<li class="active"><img src="./assets/0.png"></li>
-					<li><img src="./assets/1.png"></li>
-					<li><img src="./assets/2.png"></li>
-					<li><img src="./assets/3.png"></li>
-					<li><img src="./assets/4.png"></li>
-					<li><img src="./assets/5.png"></li>
-					<li><img src="./assets/6.png"></li>
+					
 				</ul>
 			</div>
 			<!-- <span class="point" id="translation"></span> -->
@@ -144,11 +142,11 @@
 		<div class="title">Размеры</div>
 		<div class="row offset-bottom">
 			<div class="col-xs-6">
-				<input type="range" id="mapSizeX" class="range" min="50" max="150" step="10" value="50" data-output="#inputSizeX">
+				<input type="range" id="mapSizeX" class="range" min="30" max="150" step="10" value="50" data-output="#inputSizeX">
 				<div class="align-center" id="inputSizeX">50</div>
 			</div>
 			<div class="col-xs-6">
-				<input type="range" id="mapSizeY" class="range" min="50" max="150" step="10" value="50" data-output="#inputSizeY">
+				<input type="range" id="mapSizeY" class="range" min="30" max="150" step="10" value="50" data-output="#inputSizeY">
 				<div class="align-center" id="inputSizeY">50</div>
 			</div>
 		</div>
@@ -167,6 +165,10 @@
 		<hr>
 		<button type="button" class="btn block" id="generateMap">Генерировать</button>
 	</aside>
+
+	<div class="texttures-wrapper">
+		<img src="assets/ground.png" alt="" id="textureGround">
+	</div>
 
 	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;subset=cyrillic" rel="stylesheet">
 

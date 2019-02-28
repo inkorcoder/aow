@@ -78,7 +78,8 @@ canvas {
 
 			canvas {
 				width: 100%; height: 100%;
-				position: relative;
+				position: absolute;
+				top: 0; left: 0;
 				z-index: 2;
 			}
 			&:before {
@@ -128,6 +129,7 @@ canvas {
 				border-radius: 3px;
 				margin-bottom: 10px;
 				z-index: 2;
+				white-space: nowrap;
 
 				&:after {
 					content: '';
@@ -141,20 +143,26 @@ canvas {
 					background: $bg;
 					transform: rotate(45deg);
 				}
+				span {
+					display: block;
+					font-size: 10px;
+				}
 			}
 
 			.textures-list {
 				border: 1px solid darken($dark, 10);
-				width: 32px;
+				width: 98px;
 				margin: 0;
 				padding: 0;
+				min-height: 40px;
 
 				li {
-					display: block;
-					width: 100%;
+					display: inline-block;
+					vertical-align: middle;
+					width: 32px;
 					background: $bg;
-					border-top: 1px solid darken($dark, 10);
-					border-radius: 1px;
+					padding: 1px;
+					position: relative;
 
 					&:first-child {
 						border: none;
@@ -163,6 +171,27 @@ canvas {
 						position: relative;
 						z-index: 2;
 						box-shadow: 0 0 0 4px $bg;
+					}
+					&:hover {
+
+						img {
+							filter: brightness(1.8);
+						}
+						&:before {
+							content: attr(data-index);
+							background: $dark;
+							display: block;
+							width: 30px;
+							line-height: 20px;
+							text-align: center;
+							font-size: 12px;
+							border-radius: 3px;
+							margin-top: -10px;
+							margin-left: 5px;
+							position: absolute;
+							z-index: 2;
+							top: 50%; left: 100%;
+						}
 					}
 				}
 				img {
@@ -483,6 +512,13 @@ canvas {
 				display: block;
 			}
 		}
+	}
+
+
+	/*textures*/
+	.texttures-wrapper {
+		position: absolute;
+		top: 0; left: -200%;
 	}
 
 }
