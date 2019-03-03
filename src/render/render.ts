@@ -100,6 +100,10 @@ export class Render {
 		}
 	}
 
+	renderTexturedMapSegment(){
+		
+	}
+
 	renderColoredMapSegment(map: Map, segment: Vector, color: string){
 		map.data[segment.y][segment.x] = map.colorsKeys[color];
 		let key: string = map.colorsArray[map.data[segment.y][segment.x]];

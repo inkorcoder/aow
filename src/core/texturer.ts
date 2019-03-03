@@ -17,15 +17,23 @@ for (let groupY = 0; groupY < 5; groupY++){
 }
 
 
+
 export let Texturer: TexturesSet = {
 	ground: images.ground,
 	canvas: document.createElement('canvas'),
-	samples: {
+	samples: { // igamges base64
 		ground: []
 	},
-	data: {
+	data: { // canvas imageData
 		ground: []
-	}
+	},
+	groundIndexes: [
+		[].createNumerical(18, 18),
+		[].createNumerical(63, 27),
+		[].createNumerical(108, 27),
+		[].createNumerical(153, 27),
+		[].createNumerical(180, 27)
+	]
 };
 Texturer.canvas.width = Texturer.canvas.height = 512;
 Texturer.ctx = Texturer.canvas.getContext("2d");
@@ -61,9 +69,10 @@ interface TexturesSet {
 	canvas: HTMLCanvasElement;
 	ctx?: CanvasRenderingContext2D;
 	samples?: {
-		ground: any[];
+		ground: string[];
 	};
 	data: {
 		ground: any[]
-	}
+	};
+	groundIndexes: number[][];
 }

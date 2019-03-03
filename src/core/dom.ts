@@ -139,6 +139,22 @@ export function $(selector: any, context?: any) {
 		return nodes;
 	}
 
+	nodes.trigger = function(eventName: string){
+		let event = new Event(eventName);
+		traverse((node: any)=> {
+			node.dispatchEvent(event);
+		});
+		return nodes;
+	}
+
+	nodes.val = function(value: string){
+		let event = new Event(value);
+		traverse((node: any)=> {
+			node.value = value;
+		});
+		return nodes;
+	}
+
 	return nodes;
 }
 

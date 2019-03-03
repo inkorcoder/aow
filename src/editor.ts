@@ -18,7 +18,7 @@ import { $ } from './core/dom';
 import { Ajax } from './core/ajax';
 
 // Ajax.post('/save-map', {a: 1}).subscribe((res: any)=> console.log(res));
-Ajax.get('/get-maps').subscribe((res: any)=> console.log(res));
+// Ajax.get('/get-maps').subscribe((res: any)=> console.log(res));
 
 // // console.log(Input.key)
 
@@ -101,6 +101,13 @@ texturer.page = 0;
 texturer.pagination = 9*3;
 // console.log(texturer);
 
+
+let MAP_NOISE: any[] = [],
+		MAP_TEXTURED: any[] = [],
+		MAP_OBJECTS: any[] = [],
+		MAP_WALKABLE: any[] = [];
+
+
 let mapColors: string[] = ["water","ground","grass","greenery","foot","mountain"];
 
 let view: HTMLElement = document.querySelector('.view');
@@ -117,10 +124,10 @@ let segmentPointer: HTMLElement = document.querySelector('#segmentPointer');
 
 function createMap(){
 	let t1 = performance.now();
-	mapData = noise(dimension, 1, 4, 1, 0);
-	map = new Map(sizeX, sizeY, mapData, r, d);
+	MAP_NOISE = noise(dimension, 1, 4, 1, 0);
+	map = new Map(sizeX, sizeY, MAP_NOISE, r, d);
 	map.setMode(type);
-	map.generateGrid(mapData);
+	map.generateGrid(MAP_NOISE);
 	transform();
 	texturedMapRenderer.setRects(sizeX*d, sizeY*r);
 	// texturedMapRenderer.renderSingleFrame();
@@ -128,11 +135,12 @@ function createMap(){
 	// noiseRenderer.renderSingleFrame();
 	render();
 	let t2 = performance.now();
-	console.log(`[ Map::creating ]
-			perlin:         ${dimension} x ${dimension},
-			size:           ${sizeX} x ${sizeY},
-			type:           ${type}
-			time:           ${(t2-t1).toFixed()} ms`.replace(/\t/gim, ''));
+	showDebugMessage(`Карта создана: ${(t2-t1).toFixed()} ms`);
+}
+
+function showDebugMessage(string: string){
+	$('#debugMessage').html(string);
+	setTimeout(()=> {$('#debugMessage').html("")}, 5000);
 }
 
 // let grid: Grid = new Grid(sizeX, sizeY, walkable, r, d);
@@ -150,16 +158,9 @@ noiseRenderer.onRender(()=> {
 });
 // noiseRenderer.renderSingleFrame();
 
-let textrs: any = [
-	[].createNumerical(18, 18),
-	[].createNumerical(63, 27),
-	[].createNumerical(108, 27),
-	[].createNumerical(153, 27),
-	[].createNumerical(180, 27)
-];
 texturedMapRenderer.onRender(()=> {
 	if (map){
-		texturedMapRenderer.renderTexturedMap(map, Texturer.data.ground, textrs);
+		texturedMapRenderer.renderTexturedMap(map, Texturer.data.ground, Texturer.groundIndexes);
 	}
 });
 
@@ -360,12 +361,28 @@ $('[data-set-tab]').map((node: any, index: number)=> {
 });
 
 $('#addTextures').on('click', (e: any)=> {
-
+	mapLayer = "texture";
+	showDebugMessage("Текстуры наложены автоматически");
+	render();
 });
 
 $('[name="layer"]').on('click', (e: any)=> {
 	mapLayer = e.target.value;
-	render();
+	// render();
+	$(noiseRenderer.canvas).removeClass('active');
+	$(texturedMapRenderer.canvas).removeClass('active');
+	switch (mapLayer){
+		case "noise":
+			$(noiseRenderer.canvas).addClass('active');
+			showDebugMessage(`Переключено на карту высот`);
+			break;
+		case "texture":
+			$(texturedMapRenderer.canvas).addClass('active');
+			showDebugMessage(`Переключено на текстуру`);
+			break;
+		case "walk":
+			break;
+	}
 });
 
 /*
