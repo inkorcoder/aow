@@ -59,6 +59,20 @@
 				<hr>
 				<div class="title">Текстура</div>
 				<button class="btn block" type="button" id="addTextures">Текстурировать</button>
+				<hr>
+				<div class="title">Слой</div>
+				<div class="checkbox offset-bottom">
+					<input type="radio" name="layer" id="layer1" value="noise">
+					<label for="layer1">Perlin Noise</label>
+				</div>
+				<div class="checkbox offset-bottom">
+					<input type="radio" name="layer" id="layer2" value="texture" checked="">
+					<label for="layer2">Texture</label>
+				</div>
+				<div class="checkbox offset-bottom">
+					<input type="radio" name="layer" id="layer3" value="walk">
+					<label for="layer3">Walkable</label>
+				</div>
 			</div>
 		</div>
 
@@ -77,8 +91,8 @@
 	<!-- view -->
 	<div class="view">
 		<div class="wrapper">
-			<canvas id="noiseRender"></canvas>
 			<canvas id="texturedMapRender"></canvas>
+			<canvas id="noiseRender"></canvas>
 			<canvas id="walkRender"></canvas>
 			<div class="segment" id="segmentPointer">
 				<div class="bg"></div>

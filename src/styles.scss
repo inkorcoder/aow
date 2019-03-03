@@ -81,6 +81,10 @@ canvas {
 				position: absolute;
 				top: 0; left: 0;
 				z-index: 2;
+
+				&.active {
+					z-index: 3;
+				}
 			}
 			&:before {
 				content: "no map.";
@@ -154,7 +158,9 @@ canvas {
 				width: 98px;
 				margin: 0;
 				padding: 0;
+				height: 200px;
 				min-height: 40px;
+				background: $bg;
 
 				li {
 					display: inline-block;

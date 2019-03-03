@@ -68,7 +68,8 @@ export class Render {
 	}
 
 	renderSingleFrame(){
-
+		this.start();
+		this.stop();
 	}
 
 	renderColoredMap(map: Map){
@@ -88,7 +89,7 @@ export class Render {
 			// console.log(textures, indexes)
 			for (let x = 0; x < map.size.x; x++){
 				for (let y = 0; y < map.size.y; y++){
-					let groundtype = Math.clamp(map.data[y][x]-1, 0, 4);
+					let groundtype = Math.clamp(map.data[y][x], 0, 4);
 					// console.log(groundtype)
 					let tile: any = textures[indexes[groundtype][Math.floor(indexes[groundtype].length*Math.random())]];
 					this.ctx.putImageData(tile, x*map.cellSize.x, y*map.cellSize.y);

@@ -3,6 +3,7 @@ interface Array<T> {
 	contains(item: any): boolean;
 	min(): number;
 	max(): number;
+	createNumerical(shift: number, length: number): number[];
 }
 
 Array.prototype.remove = function(item: any): void {
@@ -30,3 +31,11 @@ Array.prototype.max = function() {
 Array.prototype.min = function() {
 	return Math.min.apply(null, this);
 };
+
+Array.prototype.createNumerical = function(shift: number, length: number){
+	let array: number[] = [];
+	for (let i = 0; i < length; i++){
+		array.push(shift+i);
+	}
+	return array;
+}

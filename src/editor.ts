@@ -61,7 +61,8 @@ let sizeX = 50,
 		type = MapModes.General,
 
 		activeTab: string = "map",
-		mapColor: string = "water";
+		mapColor: string = "water",
+		mapLayer: string = "texture";
 
 // console.dir();
 function insertTexturerView(page: number = 0, pagination: number = 9){
@@ -119,8 +120,10 @@ function createMap(){
 	map.generateGrid(mapData);
 	transform();
 	texturedMapRenderer.setRects(sizeX*d, sizeY*r);
-	texturedMapRenderer.start();
-	texturedMapRenderer.stop();
+	// texturedMapRenderer.renderSingleFrame();
+	noiseRenderer.setRects(sizeX*d, sizeY*r);
+	// noiseRenderer.renderSingleFrame();
+	render();
 	let t2 = performance.now();
 	console.log(`[ Map::creating ]
 			perlin:         ${dimension} x ${dimension},
@@ -137,28 +140,25 @@ let texturedMapRenderer: Render = new Render('#texturedMapRender');
 noiseRenderer.setRects(sizeX*d, sizeY*r);
 texturedMapRenderer.setRects(sizeX*d, sizeY*r);
 
-// noiseRenderer.onRender(()=> {
-// 	if (map){
-// 		noiseRenderer.renderColoredMap(map);
-// 	}
-// });
-// noiseRenderer.start();
-// noiseRenderer.stop();
+noiseRenderer.onRender(()=> {
+	if (map){
+		noiseRenderer.renderColoredMap(map);
+	}
+});
+// noiseRenderer.renderSingleFrame();
 
 let textrs: any = [
-	[4, 18, 19, 20],
-	[13, 40, 45, 46, 47],
-	[31, 67, 72, 73, 74],
-	[85, 99, 100, 101],
-	[94]
+	[].createNumerical(18, 18),
+	[].createNumerical(63, 27),
+	[].createNumerical(108, 27),
+	[].createNumerical(153, 27),
+	[].createNumerical(180, 27)
 ];
 texturedMapRenderer.onRender(()=> {
 	if (map){
 		texturedMapRenderer.renderTexturedMap(map, Texturer.data.ground, textrs);
 	}
 });
-texturedMapRenderer.start();
-texturedMapRenderer.stop();
 
 
 function transform(direction?: Vector, origin?: Vector){
@@ -200,6 +200,23 @@ function transform(direction?: Vector, origin?: Vector){
 	$('#debugPositionY').html((translation.y).toFixed());
 }
 transform();
+
+function render(){
+	$(noiseRenderer.canvas).removeClass('active');
+	$(texturedMapRenderer.canvas).removeClass('active');
+	switch (mapLayer){
+		case "noise":
+			$(noiseRenderer.canvas).addClass('active');
+			noiseRenderer.renderSingleFrame();
+			break;
+		case "texture":
+			$(texturedMapRenderer.canvas).addClass('active');
+			texturedMapRenderer.renderSingleFrame();
+			break;
+		case "walk":
+			break;
+	}
+}
 
 
 
@@ -273,7 +290,7 @@ Input.on('mousewheel', (e: any, direction: number, delta: number)=> {
 		} else {
 			texturer.page++;
 		}
-		texturer.page = Math.clamp(texturer.page, 0, 3);
+		texturer.page = Math.clamp(texturer.page, 0, 8);
 	}
 });
 
@@ -343,6 +360,10 @@ $('#addTextures').on('click', (e: any)=> {
 
 });
 
+$('[name="layer"]').on('click', (e: any)=> {
+	mapLayer = e.target.value;
+	render();
+});
 
 /*
 	Output
