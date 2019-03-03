@@ -15,7 +15,10 @@ import { Texturer } from './core/texturer';
 import { noise } from './math/noise';
 import { Input } from './core/input';
 import { $ } from './core/dom';
+import { Ajax } from './core/ajax';
 
+// Ajax.post('/save-map', {a: 1}).subscribe((res: any)=> console.log(res));
+Ajax.get('/get-maps').subscribe((res: any)=> console.log(res));
 
 // // console.log(Input.key)
 
@@ -290,7 +293,7 @@ Input.on('mousewheel', (e: any, direction: number, delta: number)=> {
 		} else {
 			texturer.page++;
 		}
-		texturer.page = Math.clamp(texturer.page, 0, 8);
+		texturer.page = Math.clamp(texturer.page, 0, 7);
 	}
 });
 
