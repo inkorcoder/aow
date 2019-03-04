@@ -33,7 +33,36 @@ export let Texturer: TexturesSet = {
 		[].createNumerical(108, 27),
 		[].createNumerical(153, 27),
 		[].createNumerical(180, 27)
-	]
+	],
+	groundBoundaries: {
+		water: {min: 0, max: 44},
+		ground: {min: 45, max: 89},
+		grass: {min: 90, max: 134},
+		greenery: {min: 135, max: 179},
+		foot: {min: 180, max: 206},
+		mountain: {min: 180, max: 206}
+	},
+	getRandomGroundTile: function(index: number){
+		let availableTiles = this.data.ground,
+				indexesArray = this.groundIndexes[index];
+		return availableTiles[indexesArray[Math.floor(Math.random()*indexesArray.length)]];
+	},
+	getTypeByBoundary: function(index: number){
+		let bounds = this.groundBoundaries;
+		if (index >= bounds.water.min && index <= bounds.water.max){
+			return "water";
+		} else if (index >= bounds.ground.min && index <= bounds.ground.max){
+			return "ground";
+		} else if (index >= bounds.grass.min && index <= bounds.grass.max){
+			return "grass";
+		} else if (index >= bounds.greenery.min && index <= bounds.greenery.max){
+			return "greenery";
+		} else if (index >= bounds.foot.min && index <= bounds.foot.max){
+			return "foot";
+		} else if (index >= bounds.mountain.min && index <= bounds.mountain.max){
+			return "mountain";
+		}
+	}
 };
 Texturer.canvas.width = Texturer.canvas.height = 512;
 Texturer.ctx = Texturer.canvas.getContext("2d");
@@ -42,6 +71,12 @@ let tileCanvas = document.createElement('canvas'),
 		tileCtx = tileCanvas.getContext('2d');
 tileCanvas.width = 30;
 tileCanvas.height = 20;
+
+
+
+
+
+
 
 function createTiles(){
 	Texturer.ctx.drawImage(images.ground, 0, 0, images.ground.clientWidth, images.ground.clientHeight);
@@ -75,4 +110,32 @@ interface TexturesSet {
 		ground: any[]
 	};
 	groundIndexes: number[][];
+	getRandomGroundTile: Function;
+	groundBoundaries: {
+		water: {
+			min: number;
+			max: number;
+		};
+		ground: {
+			min: number;
+			max: number;
+		};
+		grass: {
+			min: number;
+			max: number;
+		};
+		greenery: {
+			min: number;
+			max: number;
+		};
+		foot: {
+			min: number;
+			max: number;
+		};
+		mountain: {
+			min: number;
+			max: number;
+		};
+	};
+	getTypeByBoundary: Function;
 }

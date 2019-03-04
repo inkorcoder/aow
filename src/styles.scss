@@ -117,6 +117,7 @@ canvas {
 			position: absolute;
 			z-index: 5;
 			top: 0; left: 0;
+			margin-top: -2px;
 
 			.heading {
 				position: absolute;
@@ -152,7 +153,6 @@ canvas {
 					font-size: 10px;
 				}
 			}
-
 			.textures-list {
 				border: 1px solid darken($dark, 10);
 				width: 98px;

@@ -1,6 +1,7 @@
 import { Map } from "./map";
 import { Grid } from "./../core/grid";
 import { Vector } from "./../math/vector";
+import { Texturer } from './../core/texturer';
 
 export class Render {
 
@@ -84,8 +85,10 @@ export class Render {
 		}
 	}
 
-	renderTexturedMap(map: Map, textures: string[], indexes: number[][]){
+	renderTexturedMap(map: Map){
 		if (map){
+			let textures = Texturer.data.ground,
+					indexes = Texturer.groundIndexes;
 			// console.log(textures, indexes)
 			for (let x = 0; x < map.size.x; x++){
 				for (let y = 0; y < map.size.y; y++){
@@ -100,15 +103,27 @@ export class Render {
 		}
 	}
 
-	renderTexturedMapSegment(){
-		
-	}
-
 	renderColoredMapSegment(map: Map, segment: Vector, color: string){
 		map.data[segment.y][segment.x] = map.colorsKeys[color];
 		let key: string = map.colorsArray[map.data[segment.y][segment.x]];
 		this.ctx.fillStyle = map.colors[key];
 		this.ctx.fillRect(segment.x*map.cellSize.x, segment.y*map.cellSize.y, map.cellSize.x, map.cellSize.y);
+	}
+
+	renderTexturedMapSegment(map: Map, segment: Vector, type: string, directIndex?: number){
+		let textures = Texturer.data.ground,
+				indexes = Texturer.groundIndexes,
+				tile;
+		if (typeof directIndex === "number"){
+			tile = Texturer.data.ground[directIndex];
+		} else {
+			tile = Texturer.getRandomGroundTile(map.colorsKeys[type]);
+		}
+		if (tile){
+			this.ctx.putImageData(tile, segment.x*map.cellSize.x, segment.y*map.cellSize.y);
+		} else {
+			console.log('Render texture: tile is null');
+		}
 	}
 
 	renderGrid(map: Grid){

@@ -61,6 +61,7 @@ let sizeX = 50,
 		translation = new Vector(),
 		lastPosition = new Vector(),
 		segment = new Vector(),
+		selectedSegment = new Vector(),
 		type = MapModes.General,
 
 		activeTab: string = "map",
@@ -73,8 +74,10 @@ function insertTexturerView(page: number = 0, pagination: number = 9){
 	let array = Texturer.samples.ground.slice(page*pagination, (page+1)*pagination);
 	$('.texturer span').html("("+page*pagination+"-"+(page+1)*pagination+")");
 	for (let i = 0; i < array.length; i++){
-		// if (i < 54) continue;
-		texturesHtml += `<li data-index="${page*pagination+i}"><img src="${array[i]}"></li>`;
+		texturesHtml += `
+		<li data-index="${page*pagination+i}" data-type="${Texturer.getTypeByBoundary(page*pagination+i)}">
+			<img src="${array[i]}">
+		</li>`.replace(/(\t|\n|\r)/gim, '');
 	}
 	$('.textures-list').html(texturesHtml);
 };
@@ -160,7 +163,7 @@ noiseRenderer.onRender(()=> {
 
 texturedMapRenderer.onRender(()=> {
 	if (map){
-		texturedMapRenderer.renderTexturedMap(map, Texturer.data.ground, Texturer.groundIndexes);
+		texturedMapRenderer.renderTexturedMap(map);
 	}
 });
 
@@ -232,10 +235,12 @@ Input.on('mousedown', (e: any, center: Vector)=> {
 	if (activeTab === "map"){
 		if (Input.key.ctrl && e.which === 1){
 			noiseRenderer.renderColoredMapSegment(map, segment, mapColor);
+			texturedMapRenderer.renderTexturedMapSegment(map, segment, mapColor);
 		} else if (!Input.key.ctrl && e.which === 1 && e.target.matches && e.target.matches('canvas')) {
 			let bbox = wrapper.getBoundingClientRect();
 			$('#texturer').css("left", ((segment.x + 2) * d * scale / bbox.width * 100)+"%");
 			$('#texturer').css("top", (segment.y * r * scale / bbox.height * 100)+"%");
+			selectedSegment = segment.clone();
 		}
 	}
 });
@@ -243,6 +248,7 @@ Input.on('drag', (e: any, direction: Vector)=> {
 	if (activeTab === "map"){
 		if (Input.key.ctrl && e.which === 1) {
 			noiseRenderer.renderColoredMapSegment(map, segment, mapColor);
+			texturedMapRenderer.renderTexturedMapSegment(map, segment, mapColor);
 			return;
 		}
 	}
@@ -382,6 +388,18 @@ $('[name="layer"]').on('click', (e: any)=> {
 			break;
 		case "walk":
 			break;
+	}
+});
+
+$('.textures-list').click((e: any)=> {
+	let li = e.target.closest('li');
+	if (li){
+		let index = parseInt($(li).attr('data-index')),
+				type = $(li).attr('data-type').toString();
+		if (selectedSegment){
+			noiseRenderer.renderColoredMapSegment(map, selectedSegment, type);
+			texturedMapRenderer.renderTexturedMapSegment(map, selectedSegment, type, index);
+		}
 	}
 });
 
