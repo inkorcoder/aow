@@ -25,7 +25,8 @@ export class Render {
 		this.onRenderCallbacks = [];
 
 		window.addEventListener('resize', (e)=> {
-			this.setRects();
+			// this.setRects(this.width, this.height);
+			// this.renderSingleFrame();
 		});
 	}
 

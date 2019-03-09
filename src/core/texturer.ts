@@ -4,7 +4,7 @@ let images: any = {
 
 let positions: number[][] = [];
 for (let groupY = 0; groupY < 5; groupY++){
-	for (let groupX = 0; groupX < 5; groupX++){
+	for (let groupX = 0; groupX < 7; groupX++){
 		if (groupY === 4 && groupX < 2){
 			continue;
 		}
@@ -29,10 +29,10 @@ export let Texturer: TexturesSet = {
 	},
 	groundIndexes: [
 		[].createNumerical(18, 18),
-		[].createNumerical(63, 27),
-		[].createNumerical(108, 27),
-		[].createNumerical(153, 27),
-		[].createNumerical(180, 27)
+		[].createNumerical(81, 36),
+		[].createNumerical(144, 36),
+		[].createNumerical(207, 36),
+		[].createNumerical(252, 36)
 	],
 	groundBoundaries: {
 		water: {min: 0, max: 44},
@@ -64,7 +64,7 @@ export let Texturer: TexturesSet = {
 		}
 	}
 };
-Texturer.canvas.width = Texturer.canvas.height = 512;
+Texturer.canvas.width = Texturer.canvas.height = 1024;
 Texturer.ctx = Texturer.canvas.getContext("2d");
 
 let tileCanvas = document.createElement('canvas'),
@@ -89,12 +89,14 @@ function createTiles(){
 	}
 }
 
-if (images.ground.complete){
-	createTiles();
-} else {
-	images.ground.onload = (e: any)=> {
+if (images.ground){
+	if (images.ground.complete){
 		createTiles();
-	};
+	} else {
+		images.ground.onload = (e: any)=> {
+			createTiles();
+		};
+	}
 }
 
 

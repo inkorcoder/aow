@@ -14,8 +14,8 @@ import { Unit } from './core/unit';
 // let vec1: Vector = new Vector();
 // console.log(vec1);
 
-let sizeX: number = 40,
-		sizeY: number = 40,
+let sizeX: number = 50,
+		sizeY: number = 50,
 		walkable = [],
 		// walkable: number[][] = [
 		// 	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -70,9 +70,9 @@ let player: Object2D = new Object2D();
 player.position = new Vector(210, 200);
 
 let units: Unit[] = [];
-for (let j = 0; j < 10; j++){
+for (let j = 0; j < 100; j++){
 	let u = new Unit(grid);
-	u.position = new Vector(Math.randomInt(0, sizeX)*d, Math.randomInt(0, sizeY)*r);
+	u.position = new Vector(Math.randomInt(0, sizeX)*d+5, Math.randomInt(0, sizeY)*r+5);
 	if (grid.nodeFromWorldPoint(u.position).walkable){
 		units.push(u);
 	}

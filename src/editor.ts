@@ -18,7 +18,6 @@ import { $ } from './core/dom';
 import { Ajax } from './core/ajax';
 
 // Ajax.post('/save-map', {a: 1}).subscribe((res: any)=> console.log(res));
-// Ajax.get('/get-maps').subscribe((res: any)=> console.log(res));
 
 // // console.log(Input.key)
 
@@ -46,13 +45,29 @@ import { Ajax } from './core/ajax';
 // 	console.log(direction);
 // })
 
+let savedMaps: any[] = [];
+Ajax.get('/get-maps').subscribe((res: any)=> {
+	savedMaps = res.maps;
+	$('#mapsCounter').html(savedMaps.length);
+	let html = "";
+	savedMaps.map((map: any)=> {
+		html += `<li>
+			<div class="name">${map.name}</div>
+			<div class="row">
+				<div class="col-xs-4">size: <span>${Math.size(map.size)}</span></div>
+				<div class="col-xs-8">last modified: <span>${new Date(map.mtime).toLocaleString()}</span></div>
+			</div>
+		</li>`;
+	});
+	$('#savedMapsList').html(html);
+});
 
 let sizeX = 50,
 		sizeY = 50,
 		r = 20,
 		d = 30,
 		walkable = [],
-		mapData,
+		mapData = [],
 		scale = .5,
 		oldScale = .5,
 		dimension = 256,
@@ -66,7 +81,8 @@ let sizeX = 50,
 
 		activeTab: string = "map",
 		mapColor: string = "water",
-		mapLayer: string = "texture";
+		mapLayer: string = "texture",
+		mapName: string = "a.0.0.0";
 
 // console.dir();
 function insertTexturerView(page: number = 0, pagination: number = 9){
@@ -101,7 +117,7 @@ class TexturerView {
 let texturer: TexturerView = new TexturerView();
 
 texturer.page = 0;
-texturer.pagination = 9*3;
+texturer.pagination = 9*6;
 // console.log(texturer);
 
 
@@ -300,7 +316,7 @@ Input.on('mousewheel', (e: any, direction: number, delta: number)=> {
 		} else {
 			texturer.page++;
 		}
-		texturer.page = Math.clamp(texturer.page, 0, 7);
+		texturer.page = Math.clamp(texturer.page, 0, Math.floor(Texturer.data.ground.length / texturer.pagination));
 	}
 });
 
@@ -403,6 +419,12 @@ $('.textures-list').click((e: any)=> {
 	}
 });
 
+$('#mapName').val(mapName);
+$('#mapName').on('input', (e: any)=> {
+	mapName = e.target.value;
+	console.log(mapName);
+});
+
 /*
 	Output
 */
@@ -423,4 +445,46 @@ $('#debugSetScale').click(()=> {
 	center.x = 0;
 	center.y = 0;
 	transform();
+});
+
+
+/*
+	LOAD | SAVE
+*/
+
+function LOAD(){
+
+}
+
+function SAVE(){
+	Ajax.post('/save-map', {
+		sizeX: sizeX,
+		sizeY: sizeY,
+		r: r,
+		d: d,
+		scale: scale,
+		oldScale: oldScale,
+		dimension: dimension,
+		center: center,
+		centerPoint: centerPoint,
+		translation: translation,
+		lastPosition: lastPosition,
+		segment: segment,
+		selectedSegment: selectedSegment,
+		type: type,
+		activeTab: activeTab,
+		mapColor: mapColor,
+		mapLayer: mapLayer,
+		mapName: mapName,
+		MAP_NOISE: MAP_NOISE,
+		MAP_TEXTURED: MAP_TEXTURED,
+		MAP_OBJECTS: MAP_OBJECTS,
+		MAP_WALKABLE: MAP_WALKABLE,
+		map: map
+	}).subscribe((res: any)=> console.log(res));
+}
+
+
+$('#save').click((e: any)=> {
+	SAVE();
 });

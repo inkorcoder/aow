@@ -6,6 +6,14 @@
 </head>
 <body class="editor">
 
+	<header class="header">
+		<div class="row">
+			<div class="col-xs-2 col-xs-offset-5">
+				<input type="text" id="mapName" placeholder="Map name" class="input">
+			</div>
+		</div>
+	</header>
+
 	<aside class="left">
 
 		<ul class="tabs">
@@ -79,10 +87,10 @@
 		<footer>
 			<div class="row">
 				<div class="col-xs-12 offset-bottom">
-					<button class="btn block" type="button">Открыть</button>
+					<button class="btn block" type="button" id="open">Открыть</button>
 				</div>
 				<div class="col-xs-12">
-					<button class="btn block" type="button">Сохранить</button>
+					<button class="btn block" type="button" id="save">Сохранить</button>
 				</div>
 			</div>
 		</footer>
@@ -185,6 +193,18 @@
 		<hr>
 		<button type="button" class="btn block" id="generateMap">Генерировать</button>
 	</aside>
+
+	<div class="modal">
+		<div class="inner">
+			<div class="title">Сохраненные карты (<span id="mapsCounter"></span>)</div>
+			<hr>
+			<div class="scrolled" style="height: auto; max-height: 300px;">
+				<ul class="clear saved-maps-list" id="savedMapsList">
+					
+				</ul>
+			</div>
+		</div>
+	</div>
 
 	<div class="texttures-wrapper">
 		<img src="assets/ground.png" alt="" id="textureGround">

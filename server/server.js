@@ -8,7 +8,12 @@ app.get('/get-maps', cors(), function (req, res) {
 	fs.readdir(__dirname, (err, files) => {
 		files.forEach((file) => {
 			if (!file.match(/server/gim)){
-				maps.push(file);
+				var stats = fs.statSync(__dirname+"/"+file);
+				maps.push({
+					name: file,
+					size: stats.size,
+					mtime: stats.mtime
+				});
 			}
 		});
 		res.end(JSON.stringify({
@@ -26,11 +31,19 @@ app.post('/save-map', cors(), function (req, res) {
 	});
 
 	req.on('end', function (){
+
+		data = JSON.parse(body);
+
+		//
+		filePath = __dirname + `/map.${data.mapName}.json`;
+
 		fs.writeFile(filePath, body, function() {
 			console.log("Map saved. Length: "+body.length);
 			res.end(JSON.stringify({
 				status: 200,
-				message: "Map saved. Length: "+body.length
+				file: `${data.mapName}.json`,
+				message: "Map saved. Length: "+body.length,
+				data: data
 			}));
 		});
 	});

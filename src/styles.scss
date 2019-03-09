@@ -43,6 +43,13 @@ canvas {
 	background: $dark;
 	color: $grey;
 
+	.header {
+		position: absolute;
+		top: 0; left: 200px; right: 200px;
+		z-index: 3;
+		padding: 5px 10px;
+		border-bottom: 1px solid lighten($input, 10);
+	}
 	aside {
 		position: absolute;
 		height: calc(100% - 30px); width: 200px;
@@ -474,15 +481,18 @@ canvas {
 		overflow-y: auto;
 	}
 	.scrolled::-webkit-scrollbar {
-		width: 6px
+		width: 6px;
+		border-radius: 5px;
 	}
 	.scrolled::-webkit-scrollbar-track {
 		border-radius: 1px;
-		background: #333
+		background: #333;
+		border-radius: 5px;
 	}
 	.scrolled::-webkit-scrollbar-thumb {
 		border-radius: 1px;
-		background: #555
+		background: #555;
+		border-radius: 5px;
 	}
 
 	/*tabs*/
@@ -520,6 +530,48 @@ canvas {
 		}
 	}
 
+	/* modal */
+	.modal {
+		position: fixed;
+		z-index: 10;
+		top: 0; left: 0;
+		width: 100%; height: 100%;
+		background: rgba(darken($dark, 20), .8);
+
+		.inner {
+			background: $dark;
+			border-radius: 3px;
+			position: absolute;
+			height: auto;
+			max-height: 80%;
+			padding: 20px;
+			width: 400px;
+			left: 50%; top: 10%;
+			margin-left: -200px;
+		}
+	}
+	.saved-maps-list {
+		margin: 0 -10px;
+
+		> li {
+			font-size: 11px;
+			padding: 10px;
+			cursor: pointer;
+
+			.name {
+				font-size: 14px;
+				color: #fff;
+				font-weight: 600;
+			}
+			span {
+				display: block;
+				font-size: 14px;
+			}
+			&:hover {
+				background: $bg;
+			}
+		}
+	}
 
 	/*textures*/
 	.texttures-wrapper {
@@ -528,5 +580,6 @@ canvas {
 	}
 
 }
+
 
 @import "grid.scss";
