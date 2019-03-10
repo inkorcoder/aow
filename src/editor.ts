@@ -52,10 +52,17 @@ Ajax.get('/get-maps').subscribe((res: any)=> {
 	let html = "";
 	savedMaps.map((map: any, index: number)=> {
 		html += `<li data-id="${index}">
-			<div class="name">${map.name}</div>
 			<div class="row">
-				<div class="col-xs-4">size: <span>${Math.size(map.size)}</span></div>
-				<div class="col-xs-8">last modified: <span>${new Date(map.mtime).toLocaleString()}</span></div>
+				<div class="col-xs-3">
+					${map.snapshot ? "<img src="+map.snapshot+" class='adaptive'>" : ""}
+				</div>
+				<div class="col-xs-9">
+					<div class="name">${map.name}</div>
+					<div class="row">
+						<div class="col-xs-4">size: <span>${Math.size(map.size)}</span></div>
+						<div class="col-xs-8">last modified: <span>${new Date(map.mtime).toLocaleString()}</span></div>
+					</div>
+				</div>
 			</div>
 		</li>`;
 	});
@@ -438,7 +445,6 @@ $('.textures-list').click((e: any)=> {
 $('#mapName').val(mapName);
 $('#mapName').on('input', (e: any)=> {
 	mapName = e.target.value;
-	console.log(mapName);
 });
 
 /*
@@ -488,34 +494,44 @@ function LOAD(openingMap: any){
 		oldScale = data.oldScale;
 		dimension = data.dimension;
 		mapName = data.mapName;
-		// MAP_NOISE = data.MAP_NOISE;
-		// MAP_TEXTURED = data.MAP_TEXTURED;
-		// MAP_OBJECTS = data.MAP_OBJECTS;
-		// MAP_WALKABLE = data.MAP_WALKABLE;
 		map = Map.createMapFromObject(data.map);
 		createMap(map);
+		$('#mapName').val(mapName);
 	});
 }
 
 function SAVE(){
-	Ajax.post('/save-map', {
-		sizeX: sizeX,
-		sizeY: sizeY,
-		r: r,
-		d: d,
-		scale: scale,
-		oldScale: oldScale,
-		dimension: dimension,
+	texturedMapRenderer.getSnapshot(.1).subscribe((snapshot: any)=> {
+		Ajax.post('/save-map', {
+			sizeX: sizeX,
+			sizeY: sizeY,
+			r: r,
+			d: d,
+			scale: scale,
+			oldScale: oldScale,
+			dimension: dimension,
+			mapName: mapName,
+			map: map,
+			snapshot: snapshot
+		}).subscribe((res: any)=> console.log(res));
+	});
+};
+
+function RELEASE(){
+	Ajax.post('/release-map', {
 		mapName: mapName,
-		// MAP_NOISE: MAP_NOISE,
-		// MAP_TEXTURED: MAP_TEXTURED,
-		// MAP_OBJECTS: MAP_OBJECTS,
-		// MAP_WALKABLE: MAP_WALKABLE,
-		map: map
+		map: {
+			...map,
+			data: []
+		}
 	}).subscribe((res: any)=> console.log(res));
-}
+};
 
 
 $('#save').click((e: any)=> {
 	SAVE();
+});
+
+$('#release').click((e: any)=> {
+	RELEASE();
 });

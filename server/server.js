@@ -7,12 +7,14 @@ app.get('/get-maps', cors(), function (req, res) {
 	var maps = [];
 	fs.readdir(__dirname, (err, files) => {
 		files.forEach((file) => {
-			if (!file.match(/server/gim)){
+			if (!file.match(/server|release/gim)){
 				var stats = fs.statSync(__dirname+"/"+file);
+				var content = fs.readFileSync(__dirname+"/"+file, 'utf8');
 				maps.push({
 					name: file,
 					size: stats.size,
-					mtime: stats.mtime
+					mtime: stats.mtime,
+					snapshot: JSON.parse(content).snapshot
 				});
 			}
 		});
@@ -42,6 +44,29 @@ app.post('/save-map', cors(), function (req, res) {
 			res.end(JSON.stringify({
 				status: 200,
 				file: `${data.mapName}.json`,
+				message: "Map saved. Length: "+body.length,
+				data: data
+			}));
+		});
+	});
+});
+
+app.post('/release-map', cors(), function (req, res) {
+	var body = '';
+	req.on('data', function(data) {
+		body += data;
+	});
+
+	req.on('end', function (){
+
+		data = JSON.parse(body);
+		filePath = __dirname + `/map.${data.mapName}map-release.json`;
+
+		fs.writeFile(filePath, body, function() {
+			console.log("Map saved. Length: "+body.length);
+			res.end(JSON.stringify({
+				status: 200,
+				file: `${data.mapName}map-release.json`,
 				message: "Map saved. Length: "+body.length,
 				data: data
 			}));

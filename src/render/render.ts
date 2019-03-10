@@ -155,4 +155,25 @@ export class Render {
 		}
 	}
 
+	getSnapshot(scale: number = 1){
+		let tempCanvas = document.createElement('canvas'),
+				tempCtx = tempCanvas.getContext('2d');
+		tempCanvas.width = this.canvas.width * scale;
+		tempCanvas.height = this.canvas.height * scale;
+		let data = this.canvas.toDataURL();
+		let image = new Image();
+		let callback;
+		image.src = data;
+		return {
+			subscribe: function(callback?: Function){
+				image.onload = ()=> {
+					tempCtx.drawImage(image, 0, 0, tempCanvas.width, tempCanvas.height);
+					if (callback){
+						callback(tempCanvas.toDataURL());
+					}
+				};
+			}
+		}
+	}
+
 }

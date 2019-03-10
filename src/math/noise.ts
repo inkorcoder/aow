@@ -144,6 +144,6 @@ export function noise(mapDimension: number, unitSize: number, roughness: number,
 			}else if(value < 0){
 				value = 0;
 			}
-			return parseFloat(value.toFixed(3));
+			return parseFloat(value.toFixed(2));
 		}
 };
