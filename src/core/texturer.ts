@@ -42,10 +42,15 @@ export let Texturer: TexturesSet = {
 		foot: {min: 180, max: 206},
 		mountain: {min: 180, max: 206}
 	},
-	getRandomGroundTile: function(index: number){
+	getRandomGroundTile: function(groundType: number){
 		let availableTiles = this.data.ground,
-				indexesArray = this.groundIndexes[index];
-		return availableTiles[indexesArray[Math.floor(Math.random()*indexesArray.length)]];
+				indexesArray = this.groundIndexes[groundType],
+				tileIndex = Math.floor(Math.random()*indexesArray.length);
+				// console.log(groundType, tileIndex);
+		return {
+			tile: availableTiles[indexesArray[tileIndex]],
+			index: indexesArray[tileIndex]
+		};
 	},
 	getTypeByBoundary: function(index: number){
 		let bounds = this.groundBoundaries;

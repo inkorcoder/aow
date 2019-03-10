@@ -1,9 +1,11 @@
 import { Vector } from './../math/vector';
+import { Texturer } from './../core/texturer';
 
 export class Map {
 
 	size: Vector;
 	data: number[][];
+	textures: number[][];
 	cellSize: Vector;
 
 	roughtness: number = 5;
@@ -34,9 +36,20 @@ export class Map {
 
 	constructor(sizeX: number = 0, sizeY: number = 0, data: number[][], r: number = 5, d: number = 10){
 		this.size = new Vector(sizeX, sizeY);
-		this.data = [];
+		this.data = data || [];
 		this.cellSize = new Vector(d, r);
 		this.setMode(MapModes.General);
+		this.textures = [];
+	}
+
+	static createMapFromObject(mapData: Map): Map {
+		let map = new Map(
+			mapData.size.x, mapData.size.y,
+			mapData.data,
+			mapData.cellSize.y, mapData.cellSize.x
+		);
+		map.textures = mapData.textures;
+		return map;
 	}
 
 	setMode(mode: MapModes){
@@ -84,6 +97,22 @@ export class Map {
 				} else {
 					this.data[y][x] = 5;
 				}
+			}
+		}
+		this.generateTextures();
+	}
+
+	generateTextures(){
+		let textures = Texturer.data.ground,
+				indexes = Texturer.groundIndexes;
+		for (let x = 0; x < this.size.x; x++){
+			for (let y = 0; y < this.size.y; y++){
+				let groundType = Math.clamp(this.data[y][x], 0, 4);
+				// console.log(groundType);
+				let tile: any = Texturer.getRandomGroundTile(groundType);
+				// let tile: any = textures[indexes[groundType][Math.floor(indexes[groundType].length*Math.random())]];
+				if (!this.textures[y]) this.textures[y] = [];
+				this.textures[y][x] = tile.index;
 			}
 		}
 	}

@@ -49,6 +49,15 @@ app.post('/save-map', cors(), function (req, res) {
 	});
 });
 
+
+app.get('/open-map', cors(), function (req, res){
+	fs.readFile(__dirname+"/"+req.query.name, 'utf8', (err, data) => {
+		if (err) throw err;
+		res.end(JSON.stringify(data));
+	});
+});
+
+
 app.listen(3000, function () {
 	console.log('Server started at port 3000');
 });

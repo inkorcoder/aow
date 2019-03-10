@@ -88,17 +88,17 @@ export class Render {
 
 	renderTexturedMap(map: Map){
 		if (map){
-			let textures = Texturer.data.ground,
-					indexes = Texturer.groundIndexes;
-			// console.log(textures, indexes)
 			for (let x = 0; x < map.size.x; x++){
 				for (let y = 0; y < map.size.y; y++){
-					let groundtype = Math.clamp(map.data[y][x], 0, 4);
-					// console.log(groundtype)
-					let tile: any = textures[indexes[groundtype][Math.floor(indexes[groundtype].length*Math.random())]];
+					let tile: any = Texturer.data.ground[map.textures[y][x]];
 					this.ctx.putImageData(tile, x*map.cellSize.x, y*map.cellSize.y);
-					// this.ctx.fillStyle = map.colors[key];
-					// this.ctx.fillRect(x*map.cellSize.x, y*map.cellSize.y, map.cellSize.x, map.cellSize.y);
+				}
+			}
+			return {
+				subscribe: function(callback?: Function){
+					if (callback) {
+						callback();
+					}
 				}
 			}
 		}
@@ -114,16 +114,28 @@ export class Render {
 	renderTexturedMapSegment(map: Map, segment: Vector, type: string, directIndex?: number){
 		let textures = Texturer.data.ground,
 				indexes = Texturer.groundIndexes,
-				tile;
+				tile: any,
+				tileIndex: number;
 		if (typeof directIndex === "number"){
 			tile = Texturer.data.ground[directIndex];
+			tileIndex = directIndex;
 		} else {
-			tile = Texturer.getRandomGroundTile(map.colorsKeys[type]);
+			let t = Texturer.getRandomGroundTile(map.colorsKeys[type]);
+			tile = t.tile;
+			tileIndex = t.index;
 		}
 		if (tile){
 			this.ctx.putImageData(tile, segment.x*map.cellSize.x, segment.y*map.cellSize.y);
+			map.textures[segment.y][segment.x] = tileIndex;
 		} else {
 			console.log('Render texture: tile is null');
+		}
+		return {
+			subscribe: function(callback?: Function){
+				if (callback) {
+					callback(tile, segment, type);
+				}
+			}
 		}
 	}
 

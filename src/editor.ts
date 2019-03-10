@@ -50,8 +50,8 @@ Ajax.get('/get-maps').subscribe((res: any)=> {
 	savedMaps = res.maps;
 	$('#mapsCounter').html(savedMaps.length);
 	let html = "";
-	savedMaps.map((map: any)=> {
-		html += `<li>
+	savedMaps.map((map: any, index: number)=> {
+		html += `<li data-id="${index}">
 			<div class="name">${map.name}</div>
 			<div class="row">
 				<div class="col-xs-4">size: <span>${Math.size(map.size)}</span></div>
@@ -60,6 +60,9 @@ Ajax.get('/get-maps').subscribe((res: any)=> {
 		</li>`;
 	});
 	$('#savedMapsList').html(html);
+	$('#savedMapsList li').click(function(){
+		LOAD(savedMaps[$(this).attr('data-id')]);
+	});
 });
 
 let sizeX = 50,
@@ -141,18 +144,24 @@ let segmentPointer: HTMLElement = document.querySelector('#segmentPointer');
 // wrapper.style.width = sizeX*d+"px";
 // wrapper.style.height = sizeY*r+"px";
 
-function createMap(){
+function createMap(_map?: Map){
 	let t1 = performance.now();
-	MAP_NOISE = noise(dimension, 1, 4, 1, 0);
-	map = new Map(sizeX, sizeY, MAP_NOISE, r, d);
-	map.setMode(type);
-	map.generateGrid(MAP_NOISE);
+	if (!_map){
+		MAP_NOISE = noise(dimension, 1, 4, 1, 0);
+		map = new Map(sizeX, sizeY, MAP_NOISE, r, d);
+		map.setMode(type);
+		map.generateGrid(MAP_NOISE);
+	} else {
+		map = _map;
+		map.data = _map.data;
+	}
+	// map.generateTextures();
 	transform();
 	texturedMapRenderer.setRects(sizeX*d, sizeY*r);
 	// texturedMapRenderer.renderSingleFrame();
 	noiseRenderer.setRects(sizeX*d, sizeY*r);
 	// noiseRenderer.renderSingleFrame();
-	render();
+	render(_map ? true : false);
 	let t2 = performance.now();
 	showDebugMessage(`Карта создана: ${(t2-t1).toFixed()} ms`);
 }
@@ -224,7 +233,13 @@ function transform(direction?: Vector, origin?: Vector){
 }
 transform();
 
-function render(){
+function render(renderAll?: boolean){
+	if (renderAll){
+		$(texturedMapRenderer.canvas).addClass('active');
+		noiseRenderer.renderSingleFrame();
+		texturedMapRenderer.renderSingleFrame();
+		return;
+	}
 	$(noiseRenderer.canvas).removeClass('active');
 	$(texturedMapRenderer.canvas).removeClass('active');
 	switch (mapLayer){
@@ -327,9 +342,10 @@ Input.on('keydown', (e: KeyboardEvent)=> {
 			$(`[data-map-color="${mapColor}"]`).addClass('active').siblings().removeClass('active');
 		}
 	}
-	if (e.keyCode === 27){
+	if (e.keyCode === 27){ // escape
 		$('#texturer').css("left", "-1000px");
 		$('#texturer').css("top", "-1000px");
+		$('#mapsModal').removeClass('active');
 	}
 });
 
@@ -451,9 +467,34 @@ $('#debugSetScale').click(()=> {
 /*
 	LOAD | SAVE
 */
+$('#open').click((e: any)=> {
+	$('#mapsModal').addClass('active');
+});
+$('#mapsModal').click((e: any)=> {
+	if (!e.target.closest('.inner')){
+		$('#mapsModal').removeClass('active');
+	}
+});
 
-function LOAD(){
-
+function LOAD(openingMap: any){
+	Ajax.get('/open-map?name='+openingMap.name).subscribe(function(data: any){
+		$('#mapsModal').removeClass('active');
+		data = JSON.parse(data);
+		sizeX = data.sizeX;
+		sizeY = data.sizeY;
+		r = data.r;
+		d = data.d;
+		scale = data.scale;
+		oldScale = data.oldScale;
+		dimension = data.dimension;
+		mapName = data.mapName;
+		// MAP_NOISE = data.MAP_NOISE;
+		// MAP_TEXTURED = data.MAP_TEXTURED;
+		// MAP_OBJECTS = data.MAP_OBJECTS;
+		// MAP_WALKABLE = data.MAP_WALKABLE;
+		map = Map.createMapFromObject(data.map);
+		createMap(map);
+	});
 }
 
 function SAVE(){
@@ -465,21 +506,11 @@ function SAVE(){
 		scale: scale,
 		oldScale: oldScale,
 		dimension: dimension,
-		center: center,
-		centerPoint: centerPoint,
-		translation: translation,
-		lastPosition: lastPosition,
-		segment: segment,
-		selectedSegment: selectedSegment,
-		type: type,
-		activeTab: activeTab,
-		mapColor: mapColor,
-		mapLayer: mapLayer,
 		mapName: mapName,
-		MAP_NOISE: MAP_NOISE,
-		MAP_TEXTURED: MAP_TEXTURED,
-		MAP_OBJECTS: MAP_OBJECTS,
-		MAP_WALKABLE: MAP_WALKABLE,
+		// MAP_NOISE: MAP_NOISE,
+		// MAP_TEXTURED: MAP_TEXTURED,
+		// MAP_OBJECTS: MAP_OBJECTS,
+		// MAP_WALKABLE: MAP_WALKABLE,
 		map: map
 	}).subscribe((res: any)=> console.log(res));
 }
