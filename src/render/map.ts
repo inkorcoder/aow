@@ -9,6 +9,7 @@ export class Map {
 	cellSize: Vector;
 
 	roughtness: number = 5;
+	type: string;
 
 	layers: mapLayers;
 
@@ -74,6 +75,7 @@ export class Map {
 				layers = {water: 0, ground: 0, grass: .7, greenery: .8, foot: .9, mountain: 1};
 				break;
 		}
+		this.type = mode;
 		this.layers = layers;
 	}
 

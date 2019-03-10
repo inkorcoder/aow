@@ -10,11 +10,15 @@ app.get('/get-maps', cors(), function (req, res) {
 			if (!file.match(/server|release/gim)){
 				var stats = fs.statSync(__dirname+"/"+file);
 				var content = fs.readFileSync(__dirname+"/"+file, 'utf8');
+				content = JSON.parse(content);
 				maps.push({
 					name: file,
 					size: stats.size,
 					mtime: stats.mtime,
-					snapshot: JSON.parse(content).snapshot
+					snapshot: content.snapshot,
+					sizeX: content.sizeX,
+					sizeY: content.sizeY,
+					type: content.map.type
 				});
 			}
 		});

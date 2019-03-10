@@ -59,8 +59,9 @@ Ajax.get('/get-maps').subscribe((res: any)=> {
 				<div class="col-xs-9">
 					<div class="name">${map.name}</div>
 					<div class="row">
-						<div class="col-xs-4">size: <span>${Math.size(map.size)}</span></div>
-						<div class="col-xs-8">last modified: <span>${new Date(map.mtime).toLocaleString()}</span></div>
+						<div class="col-xs-4">disk: <span>${Math.size(map.size)}</span></div>
+						<div class="col-xs-4">size: <span>${map.sizeX + "x" + map.sizeY}</span></div>
+						<div class="col-xs-4">type: <span>${map.type}</span></div>
 					</div>
 				</div>
 			</div>
