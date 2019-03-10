@@ -50,7 +50,9 @@ Ajax.get('/get-maps').subscribe((res: any)=> {
 	savedMaps = res.maps;
 	$('#mapsCounter').html(savedMaps.length);
 	let html = "";
-	savedMaps.map((map: any, index: number)=> {
+	savedMaps.sort((a: any, b: any)=> {
+		return a.mtime > b.mtime ? -1 : 1;
+	}).map((map: any, index: number)=> {
 		html += `<li data-id="${index}">
 			<div class="row">
 				<div class="col-xs-3">
