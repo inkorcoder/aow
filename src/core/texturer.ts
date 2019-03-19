@@ -1,5 +1,9 @@
+import { $ } from './../core/dom';
+
+
 let images: any = {
-	ground: document.querySelector('#textureGround')
+	ground: document.querySelector('#textureGround'),
+	mountains: document.querySelector('#textureMountains')
 };
 
 let positions: number[][] = [];
@@ -22,10 +26,12 @@ export let Texturer: TexturesSet = {
 	ground: images.ground,
 	canvas: document.createElement('canvas'),
 	samples: { // igamges base64
-		ground: []
+		ground: [],
+		mountains: []
 	},
 	data: { // canvas imageData
-		ground: []
+		ground: [],
+		mountains: []
 	},
 	groundIndexes: [
 		[].createNumerical(18, 18),
@@ -67,6 +73,12 @@ export let Texturer: TexturesSet = {
 		} else if (index >= bounds.mountain.min && index <= bounds.mountain.max){
 			return "mountain";
 		}
+	},
+	getRandomMountainTile: function(){
+		return Texturer.data.mountains[Math.randomInt(0, Texturer.data.mountains.length)];
+	},
+	getRandomMountainSamle: function(){
+		return Texturer.samples.mountains[Math.randomInt(0, Texturer.samples.mountains.length)];
 	}
 };
 Texturer.canvas.width = Texturer.canvas.height = 1024;
@@ -82,8 +94,9 @@ tileCanvas.height = 20;
 
 
 
-
+/* ground loading */
 function createTiles(){
+	Texturer.ctx.clearRect(0, 0, 1024, 1024);
 	Texturer.ctx.drawImage(images.ground, 0, 0, images.ground.clientWidth, images.ground.clientHeight);
 	for (let i = 0; i < positions.length; i++){
 		let pos = positions[i];
@@ -103,7 +116,39 @@ if (images.ground){
 		};
 	}
 }
+/**/
 
+/* mountains loading */
+function createMountainsTiles(){
+	Texturer.ctx.clearRect(0, 0, 1024, 1024);
+	Texturer.ctx.drawImage(images.mountains, 0, 0, images.mountains.clientWidth, images.mountains.clientHeight);
+	tileCanvas.width = 60;
+	tileCanvas.height = 40;
+	let html: string = "";
+	for (let y = 0; y < 3; y++){
+		for (let x = 0; x < 6; x++){
+			let imgX = x*61+1,
+					imgY = y*41+1;
+			let tile = Texturer.ctx.getImageData(imgX, imgY, 60, 40);
+			tileCtx.putImageData(tile, 0, 0);
+			Texturer.samples.mountains.push(tileCanvas.toDataURL());
+			Texturer.data.mountains.push(tile);
+			html += `<li><img src="${tileCanvas.toDataURL()}"/></li>`;
+		}
+	}
+	$('.objects-list').html(html);
+}
+
+if (images.mountains){
+	if (images.mountains.complete){
+		createMountainsTiles();
+	} else {
+		images.mountains.onload = (e: any)=> {
+			createMountainsTiles();
+		};
+	}
+}
+/**/
 
 
 interface TexturesSet {
@@ -112,9 +157,11 @@ interface TexturesSet {
 	ctx?: CanvasRenderingContext2D;
 	samples?: {
 		ground: string[];
+		mountains: string[];
 	};
 	data: {
-		ground: any[]
+		ground: any[];
+		mountains: any[];
 	};
 	groundIndexes: number[][];
 	getRandomGroundTile: Function;
@@ -145,4 +192,6 @@ interface TexturesSet {
 		};
 	};
 	getTypeByBoundary: Function;
+	getRandomMountainTile: Function;
+	getRandomMountainSamle: Function;
 }

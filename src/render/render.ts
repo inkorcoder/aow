@@ -88,12 +88,31 @@ export class Render {
 
 	renderTexturedMap(map: Map){
 		if (map){
+			let mountainsIndexes: any[] = [];
 			for (let x = 0; x < map.size.x; x++){
 				for (let y = 0; y < map.size.y; y++){
+					// console.log(map.data[y][x]);
 					let tile: any = Texturer.data.ground[map.textures[y][x]];
 					this.ctx.putImageData(tile, x*map.cellSize.x, y*map.cellSize.y);
+					// mountain
+					if (map.data[y][x] === 5){
+						mountainsIndexes.push({
+							x: x, y: y
+						});
+						// console.log(x, y)
+					}
 				}
 			}
+			console.log(mountainsIndexes.length)
+			for (let i = 0; i < mountainsIndexes.length; i++){
+				let tile: any = Texturer.getRandomMountainSamle();
+				let x: any = mountainsIndexes[i].x;
+				let y: any = mountainsIndexes[i].y;
+				let img = new Image();
+				img.src = tile;
+				this.ctx.drawImage(img, x*map.cellSize.x-map.cellSize.x/2, y*map.cellSize.y-map.cellSize.y);
+			}
+
 			return {
 				subscribe: function(callback?: Function){
 					if (callback) {

@@ -17,13 +17,13 @@
 	<aside class="left">
 
 		<ul class="tabs">
-			<li data-set-tab="#modeTabs,#modeObjects,objects">Объекты</li>
+			<li class="active" data-set-tab="#modeTabs,#modeObjects,objects">Объекты</li>
 			<li data-set-tab="#modeTabs,#modeWalk,walk">Walk</li>
-			<li class="active" data-set-tab="#modeTabs,#modeMap,map">Map</li>
+			<li data-set-tab="#modeTabs,#modeMap,map">Map</li>
 		</ul>
 
 		<div id="modeTabs" class="tabs-content" style="height: calc(100% - 130px);">
-			<div class="tab" id="modeObjects">
+			<div class="tab active" id="modeObjects">
 				<div class="title">Тип Объектов</div>
 				<div class="relative">
 					<select class="input">
@@ -36,25 +36,14 @@
 				</div>
 				<div class="scrolled offset-top" style="height: calc(100% - 70px)">
 					<ul class="objects-list">
-						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-						<li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+						
 					</ul>
 				</div>
 			</div>
 			<div class="tab" id="modeWalk">
 				walk
 			</div>
-			<div class="tab active" id="modeMap">
+			<div class="tab" id="modeMap">
 				<div class="title">Карта</div>
 				<ul class="clear colors-list">
 					<li data-map-color="water" class="active"><div class="color" style="background: #519ddb"></div>water</li>
@@ -211,6 +200,7 @@
 
 	<div class="texttures-wrapper">
 		<img src="assets/ground.png" alt="" id="textureGround">
+		<img src="assets/mountains.png" alt="" id="textureMountains">
 	</div>
 
 	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;subset=cyrillic" rel="stylesheet">
